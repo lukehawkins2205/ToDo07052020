@@ -1,0 +1,12 @@
+<app-header></app-header>
+<div 
+*ngFor ="let ToDoItem of ToDoItemArray; let i = index">
+    <br>
+<mat-card>
+    <mat-checkbox (click)='onToggleTick(i)'>
+        {{ToDoItem.ToDo}}
+    </mat-checkbox>
+</mat-card>
+</div>
+
+
