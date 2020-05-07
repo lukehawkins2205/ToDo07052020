@@ -8,7 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-import {DropdownDirective} from './to-do-list/to-do-list.directive';
+
 
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -30,7 +30,6 @@ import { ErrorComponent } from './error/error.component';
     AppComponent,
     ToDoListComponent,
     HeaderComponent,
-    DropdownDirective,
     AuthComponent,
     ErrorComponent,
     
