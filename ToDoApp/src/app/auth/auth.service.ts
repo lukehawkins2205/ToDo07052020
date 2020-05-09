@@ -1,4 +1,107 @@
 import { Injectable } from '@angular/core';
+import { User } from './user.model';
+import { throwError, Subject } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { Observable } from "rxjs";
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class AuthService {
+
+  user: User;
+  getData: boolean = true;
+
+
+  constructor(private FireStoreDB: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {}
+
+
+
+
+
+  signUp(email: string, password: string){
+  this.afAuth.createUserWithEmailAndPassword(email, password)
+    .then(userResponseData => this.handleAuth(userResponseData.user.email, userResponseData.user.uid) )
+          
+       //.catch(error => console.log(error.error.error.message))
+  }
+
+  handleAuth(email: string, uid: string){
+    const userData = new User(email, uid);
+    console.log('user has logged in!', userData)
+    //this.user.next(user);
+    this.insertUserDatatoDB(userData).then(() => {
+      this.router.navigate(['/todo'])}).catch(error => {console.log(error.error.error.message)})
+    //localStorage.setItem('userData', JSON.stringify(userData));
+  }
+
+  insertUserDatatoDB(user: User){
+    //console.log(user);
+    return this.FireStoreDB.doc(`Users/${user.uid}`).set({
+      email: user.email
+    })
+  }
+
+
+  /*insertUserDatatoDB(userResponseData: firebase.auth.UserCredential){
+    console.log(userResponseData.user);
+    return this.FireStoreDB.doc(`Users/${userResponseData.user.uid}`).set({
+      email: userResponseData.user.email
+    })
+  }*/
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from './user.model';
 import { Router } from '@angular/router';
@@ -14,6 +117,8 @@ export interface AuthResponseData {
   localId: string;
   registered?: boolean;
 }
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -64,4 +169,4 @@ export class AuthService {
     console.log(errorRes.error.error.message);
   }
 
-}
+}*/

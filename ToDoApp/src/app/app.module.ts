@@ -21,6 +21,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthComponent } from './auth/auth.component';
 import { ErrorComponent } from './error/error.component';
 
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from "@angular/fire/auth";
+
+import {FormsModule} from '@angular/forms'
+
+
+
+import { environment } from 'src/environments/environment';
+
+
 
 
 
@@ -38,6 +49,7 @@ import { ErrorComponent } from './error/error.component';
   ],
   imports: [
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSidenavModule,
@@ -48,7 +60,12 @@ import { ErrorComponent } from './error/error.component';
     MatInputModule,
     MatMenuModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    FormsModule
+   
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
