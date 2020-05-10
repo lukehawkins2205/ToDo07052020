@@ -1,6 +1,9 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <span>To Do App</span>
+    <div *ngIf="btnLogOutShow">
+      <button mat-raised-button color="warn" (click)="onLogOut()">Log Out</button>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>
 <br>

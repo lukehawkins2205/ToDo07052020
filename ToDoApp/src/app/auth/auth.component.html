@@ -1,9 +1,11 @@
 <mat-card><mat-card-title>Sign Up / Log In</mat-card-title>
     <br>
+    <button mat-raised-button color="primary" (click)="onLoginType('signup')" >Sign Up</button>
+    <button mat-raised-button color="primary" (click)="onLoginType('signin')">Sign In</button>
     <br>
  <br>
  <app-error></app-error>
-<div>
+<div *ngIf="btnSignUp">
     <form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit()">
         <mat-form-field class="example-full-width">
             <mat-label>Email:</mat-label>
@@ -18,5 +20,21 @@
             <button mat-raised-button color="primary" type="submit" [disabled]="!Form.valid">Sign Up</button>
         </form>   
     </div>
+
+    <div *ngIf="btnSignUp === false">
+        <form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit()">
+            <mat-form-field class="example-full-width">
+                <mat-label>Email:</mat-label>
+                <input type="email" formControlName="email"  matInput email>
+            </mat-form-field>
+                <br>
+                <mat-form-field class="example-full-width">
+                <mat-label>Password:</mat-label>
+                <input type="password" formControlName="password"  matInput>
+              </mat-form-field>
+              <br>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!Form.valid">Sign In</button>
+            </form>   
+        </div>
 
 </mat-card>

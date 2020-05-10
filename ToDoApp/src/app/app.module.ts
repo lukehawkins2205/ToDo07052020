@@ -63,7 +63,8 @@ import { environment } from 'src/environments/environment';
     ReactiveFormsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
-    FormsModule
+    FormsModule,
+    
    
     
   ],

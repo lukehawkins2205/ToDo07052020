@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { User } from './user.model';
 import { throwError, Subject } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -6,44 +6,69 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Observable } from "rxjs";
 
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
 
-  user: User;
-  getData: boolean = true;
-
-
   constructor(private FireStoreDB: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {}
 
+  userSubject = new Subject<User>();
+  user: User;
+  showButtonSubject = new Subject;
 
-
-
+  authListener = this.afAuth.onAuthStateChanged(firebaseUser => {
+    if(firebaseUser){
+      this.user = new User(firebaseUser.email, firebaseUser.uid)
+      this.userSubject.next(this.user);
+      this.router.navigate(['/todo']);
+      this.insertUserDatatoDB(firebaseUser);
+      console.log('user logged:', firebaseUser.email, firebaseUser.uid);
+      this.showButtonSubject.next(true);
+    }else{
+      this.user = null;
+      this.router.navigate(['/auth']);
+      console.log('Current userState', firebaseUser);
+    }
+  })
+ 
 
   signUp(email: string, password: string){
-  this.afAuth.createUserWithEmailAndPassword(email, password)
-    .then(userResponseData => this.handleAuth(userResponseData.user.email, userResponseData.user.uid) )
-          
-       //.catch(error => console.log(error.error.error.message))
+  const signUpPromise = this.afAuth.createUserWithEmailAndPassword(email, password);
+  signUpPromise.catch(error => console.log(error.message));
   }
 
-  handleAuth(email: string, uid: string){
+  signIn(email: string, password: string){
+    const signInPromise = this.afAuth.signInWithEmailAndPassword(email, password);
+    signInPromise.catch(error => console.log(error.message));
+  }
+
+
+  LogOut(){
+    this.afAuth.signOut(); 
+  }
+
+
+  insertUserDatatoDB(user: User){
+    return this.FireStoreDB.doc(`Users/${user.uid}`)
+    .set({
+      email: user.email
+    })
+  }
+  
+
+  /*handleAuth(email: string, uid: string){
     const userData = new User(email, uid);
-    console.log('user has logged in!', userData)
+    this.afAuth.onAuthStateChanged(firebaseUser => {console.log(firebaseUser)})
     //this.user.next(user);
     this.insertUserDatatoDB(userData).then(() => {
       this.router.navigate(['/todo'])}).catch(error => {console.log(error.error.error.message)})
     //localStorage.setItem('userData', JSON.stringify(userData));
-  }
+  }*/
 
-  insertUserDatatoDB(user: User){
-    //console.log(user);
-    return this.FireStoreDB.doc(`Users/${user.uid}`).set({
-      email: user.email
-    })
-  }
+  
 
 
   /*insertUserDatatoDB(userResponseData: firebase.auth.UserCredential){

@@ -31,11 +31,25 @@ export class AuthComponent implements OnInit {
   testcontainer: number[] = [1,3,4,2]
 
   Form: FormGroup;
+  btnSignUp: boolean;
 
     constructor(private authService: AuthService) {}
+
+    onLoginType(loginType: string){
+      if(loginType === 'signup')
+      {
+        this.btnSignUp = true;
+      }else{
+        this.btnSignUp = false;
+      }
+    }
       
     onSubmit(){
-      this.authService.signUp(this.Form.value.email, this.Form.value.password)
+      if(this.btnSignUp){
+        this.authService.signUp(this.Form.value.email, this.Form.value.password);
+      }else{
+        this.authService.signIn(this.Form.value.email, this.Form.value.password);
+      }
     }
         
 

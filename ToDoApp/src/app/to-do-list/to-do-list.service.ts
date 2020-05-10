@@ -18,7 +18,7 @@ export class ToDoListService {
   constructor(private http: HttpClient) { }
 
   PushListToDB(){
-  this.http.put('https://todoapp-a9bad.firebaseio.com/ToDo.json', this.ToDoItemArray).subscribe(() => {});
+  //this.http.put('https://todoapp-a9bad.firebaseio.com/ToDo.json', this.ToDoItemArray).subscribe(() => {});
  }
 
   getToDoArray(){
