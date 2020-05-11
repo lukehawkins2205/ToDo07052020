@@ -14,6 +14,9 @@ export class ToDoListComponent implements OnInit {
   index: number = 0;
   subscription: Subscription;
 
+
+ 
+
   constructor(private ToDoListService: ToDoListService) { }
 
   ngOnInit() {
@@ -24,6 +27,7 @@ export class ToDoListComponent implements OnInit {
 
   }
 
+  
   onToggleTick(index: number){
     this.ToDoItemArray[index].ticked = !this.ToDoItemArray[index].ticked;
     this.ToDoListService.UpdateToDoArray(this.ToDoItemArray);

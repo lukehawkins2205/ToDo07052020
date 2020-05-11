@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ToDoListItem } from '../to-do-list/to-do-list-item.model';
 import { ToDoListService } from './../to-do-list/to-do-list.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 
 
@@ -21,10 +23,25 @@ export class HeaderComponent implements OnInit {
   Form: FormGroup;
   ToDoMessage: string = 'Add To Do';
 
-  constructor(private ToDoListService: ToDoListService) { }
+  constructor(private ToDoListService: ToDoListService, private authService: AuthService) { }
+
+
+  btnLogOutShow: boolean = false;
+  ShowLogOut = this.authService.showButtonSubject.subscribe
+  Subscription: Subscription;
 
 
   ngOnInit(): void {
+
+    this.Subscription = this.authService.showButtonSubject.subscribe(() => {
+      this.btnLogOutShow = true;
+    })
+
+    
+
+
+
+
 
     this.ToDoItemArray = this.ToDoListService.getToDoArray()
 
@@ -32,6 +49,16 @@ export class HeaderComponent implements OnInit {
       'ToDoText': new FormControl(null, Validators.required)
     });
   }
+
+
+
+
+  onLogOut(){
+    this.authService.LogOut();
+    this.btnLogOutShow = false;
+  }
+
+
 
   onShowForm(){
     this.Show = !this.Show;
