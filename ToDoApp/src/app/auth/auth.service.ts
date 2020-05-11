@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Observable } from "rxjs";
+import { promise } from 'protractor';
 
 
 @Injectable({
@@ -19,20 +20,44 @@ export class AuthService {
   user: User;
   showButtonSubject = new Subject;
 
+
+ 
+
   authListener = this.afAuth.onAuthStateChanged(firebaseUser => {
+
     if(firebaseUser){
-      this.user = new User(firebaseUser.email, firebaseUser.uid)
-      this.userSubject.next(this.user);
+
+      var email: string = firebaseUser.email;
+      var uid: string = firebaseUser.uid;
+      var idToken: string = test;
+      
+      firebaseUser.getIdToken(true).then(idTokenResponse => {
+        var test = idTokenResponse
+        return test;
+      })
+        .catch(error => {
+          console.log('IDTOKEN ERROR ',error.message);
+      })
+
+      const user = new User(email, uid, idToken)
+
+      this.insertUserDatatoDB(user);
+
       this.router.navigate(['/todo']);
-      this.insertUserDatatoDB(firebaseUser);
-      console.log('user logged:', firebaseUser.email, firebaseUser.uid);
-      this.showButtonSubject.next(true);
+
+      this.showButtonSubject.next(true); //show logout button
+
+      this.userSubject.next(user); //to bypass auth guard
+
     }else{
       this.user = null;
       this.router.navigate(['/auth']);
       console.log('Current userState', firebaseUser);
     }
   })
+
+
+  
  
 
   signUp(email: string, password: string){
@@ -49,6 +74,8 @@ export class AuthService {
   LogOut(){
     this.afAuth.signOut(); 
   }
+
+  //ngOnDrestroy(){showbutton.unsubscribe()}
 
 
   insertUserDatatoDB(user: User){
