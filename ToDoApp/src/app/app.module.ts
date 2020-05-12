@@ -30,6 +30,10 @@ import {FormsModule} from '@angular/forms'
 
 
 import { environment } from 'src/environments/environment';
+import { ToDoListCollectionComponent } from './to-do-list-collection/to-do-list-collection.component';
+import { TaskbarComponent } from './taskbar/taskbar.component';
+import { TaskbarCollectionMenuComponent } from './taskbar/taskbar-collection-menu/taskbar-collection-menu.component';
+import { TaskbarToDoListMenuComponent } from './taskbar/taskbar-to-do-list-menu/taskbar-to-do-list-menu.component';
 
 
 
@@ -43,6 +47,10 @@ import { environment } from 'src/environments/environment';
     HeaderComponent,
     AuthComponent,
     ErrorComponent,
+    ToDoListCollectionComponent,
+    TaskbarComponent,
+    TaskbarCollectionMenuComponent,
+    TaskbarToDoListMenuComponent,
     
     
 

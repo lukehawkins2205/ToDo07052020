@@ -8,6 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
+import { ɵTestingCompiler, TestBed } from '@angular/core/testing';
 
 
 
@@ -21,19 +22,24 @@ import { AuthService } from './auth.service';
 })
 export class AuthComponent implements OnInit {
 
+
+  constructor(private authService: AuthService) {}
   ngOnInit(): void {
+
     this.Form = new FormGroup({
       'email': new FormControl(null, Validators.required),
       'password': new FormControl(null, Validators.required)
     });
+
   }
 
-  testcontainer: number[] = [1,3,4,2]
+
+  
+  
 
   Form: FormGroup;
   btnSignUp: boolean;
 
-    constructor(private authService: AuthService) {}
 
     onLoginType(loginType: string){
       if(loginType === 'signup')

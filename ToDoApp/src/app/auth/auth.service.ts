@@ -19,37 +19,22 @@ export class AuthService {
   userSubject = new Subject<User>();
   user: User;
   showButtonSubject = new Subject;
-  idToken: string;
+
 
   authListener = this.afAuth.onAuthStateChanged(firebaseUser => {
 
     if(firebaseUser){
 
-      firebaseUser.getIdToken(true).then(idTokenResponse => {
-         this.idToken = idTokenResponse
-        return this.idToken;
-      })
-        .catch(error => {
-          console.log('idToken Error ',error.message);
-      })
-
-       this.user = new User(firebaseUser.email, firebaseUser.uid, this.idToken)
-
-       console.log('user logged in: ', this.user.email);
-       console.log('user idToken: ', this.user.idToken);
-
+      this.user = new User(firebaseUser.email, firebaseUser.uid);
+      console.log('User logged in: ', this.user.email);
       this.insertUserDatatoDB(this.user);
-
-      this.router.navigate(['/todo']);
-
-      this.showButtonSubject.next(true); //show logout button
-
-      this.userSubject.next(this.user); //to bypass auth guard
+      this.router.navigate(['/collections']);
 
     }else{
+
       this.user = null;
       this.router.navigate(['/auth']);
-      console.log('Current userState', firebaseUser);
+      console.log('User signed out: ', firebaseUser);
     }
   })
 

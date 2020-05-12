@@ -1,0 +1,12 @@
+<div 
+*ngFor ="let ToDoCollection of ToDoListCollectionArray; let i = index">
+    <br>
+<mat-card (click)='onCollectionClick(i)'>
+    <mat-checkbox (click)='onCollectionCheckBoxClick(i)'>
+        {{ToDoCollection.name}}
+    </mat-checkbox>
+</mat-card>
+</div>
+<p>collection panel page</p>
+
+
