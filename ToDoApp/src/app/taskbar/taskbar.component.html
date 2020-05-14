@@ -2,12 +2,23 @@
     <mat-toolbar-row>
       <span>To Do App</span>
 
+      <button mat-button [matMenuTriggerFor]="menu">CollectionM</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onCreateCollection()">Create</button>
+  <button mat-menu-item (click)="onDeleteCollections()">Delete</button>
+  <button mat-menu-item (click)="onEditCollections()">Edit</button>
+</mat-menu>
+
+<button mat-button [matMenuTriggerFor]="menu">ToDoM</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onCreateToDoItem()">Create</button>
+  <button mat-menu-item (click)="onDeletToDoItems()">Delete</button>
+  <button mat-menu-item (click)="onEditToDoItems()">Edit</button>
+</mat-menu>
+
       
 
-
-      <app-taskbar-collection-menu></app-taskbar-collection-menu>
-      <app-taskbar-to-do-list-menu></app-taskbar-to-do-list-menu>
-      <button (click)="onSignOut()">Log Out</button>
+      <button (click)="onSignOut()" mat-raised-button color="warn">Sign Out</button>
     </mat-toolbar-row>
   </mat-toolbar>
 

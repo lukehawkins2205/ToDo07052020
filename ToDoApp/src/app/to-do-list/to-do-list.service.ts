@@ -19,6 +19,38 @@ export class ToDoListService {
 
   constructor(private FireStoreDB: AngularFirestore, private afAuth: AngularFireAuth) { }
 
+
+
+
+  createToDoItem(){
+
+  }
+
+  deleteToDoItems(){
+
+  }
+
+  editToDoItems(){
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   PushListToDB(){
   //this.http.put('https://todoapp-a9bad.firebaseio.com/ToDo.json', this.ToDoItemArray).subscribe(() => {});
  }
