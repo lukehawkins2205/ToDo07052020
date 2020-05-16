@@ -36,6 +36,12 @@ import { DynamicCollectionComponent } from './to-do-list-collection/dynamic-coll
 import { SharedComponent } from './shared/shared.component';
 import { DynamicCollectionEditComponent } from "./to-do-list-collection/dynamic-collection/dynamic-collection-edit/dynamic-collection-edit.component";
 
+import { DynamicTodoCreateComponent } from "./to-do-list/dynamic-todo/dynamic-todo-create/dynamic-todo-create.component";
+import { DynamicTodoEditComponent } from "./to-do-list/dynamic-todo/dynamic-todo-edit/dynamic-todo-edit.component";
+
+
+
+
 
 
 
@@ -53,7 +59,11 @@ import { DynamicCollectionEditComponent } from "./to-do-list-collection/dynamic-
     TaskbarComponent,
     DynamicCollectionComponent,
     SharedComponent,
-    DynamicCollectionEditComponent
+    DynamicCollectionEditComponent,
+    DynamicTodoCreateComponent,
+    DynamicTodoEditComponent,
+    
+
     
     
     

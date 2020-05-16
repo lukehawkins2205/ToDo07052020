@@ -7,6 +7,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { SharedComponent } from '../shared/shared.component';
 import { tap } from 'rxjs/operators';
+import { ToDoListService } from '../to-do-list/to-do-list.service';
+
 
 
 
@@ -21,16 +23,16 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
 
   closeOpenCreation = new Subject<boolean>();
   closeOpenEdit = new Subject<boolean>();
-  
+
+  getToDoList = new Subject<string>();  
   
   toDoListCollectionArray: ToDoListCollection[] = []; 
   selectedCollectionArray: ToDoListCollection[] = [];
   userUid: string;
 
 
-  constructor(private router: Router, private fireStoreDB: AngularFirestore, private afAuth: AngularFireAuth, private sharedRandom: SharedComponent) {
-   
-
+  constructor(private router: Router, private fireStoreDB: AngularFirestore, private afAuth: AngularFireAuth, private sharedRandom: SharedComponent, private toDoService: ToDoListService) {
+  
   }
 
   ngOnInit(){
@@ -56,10 +58,10 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   }
 
 
- 
-
   getCollectionToDoList(index: number){
-    this.router.navigate(['/todo']);
+  this.toDoService.collectionUid = this.toDoListCollectionArray[index].collectionUid;
+  this.toDoService.collectionName = this.toDoListCollectionArray[index].collectionName;
+   this.router.navigate(['/todo']);
   }
 
   getCollections(){
@@ -108,7 +110,7 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   }
 
   editCollection(collectionName: string){
-    
+
     this.fireStoreDB.collection('Collections').doc(`${this.toDoListCollectionArray[this.index].collectionUid}`).update({
       'collectionName': collectionName
     }).then(()=>{}).catch(error => console.log(error.message)); 
@@ -123,6 +125,13 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
     this.selectedCollectionArray = [];
     console.log('selected container after delete function', this.selectedCollectionArray)
   }
+
+  deleteCollection(index){
+    console.log('You Have Deleted: ',this.toDoListCollectionArray[index].collectionName);
+    this.fireStoreDB.collection('Collections').doc(`${this.toDoListCollectionArray[index].collectionUid}`).delete()
+    .then(()=>{}).catch(error => console.log(error.message)); 
+  }
+
   
 
 

@@ -9,7 +9,7 @@ constructor(
     public toDoCompleted: boolean,
     public toDoCompleteBy: Date,
     public toDoCreated: Date,
-    public toDoOverdue: Date  
+    public toDoOverdue: boolean  
     ){}
 
 }

@@ -17,7 +17,7 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
   toDoListCollectionArray: ToDoListCollection[] = [];
   
   
-  subGetCollection: Subscription;
+  $getCollection: Subscription;
   collectionsDelete: boolean = false; //this needs activating.
   selectedCollectionArray: ToDoListCollection[] = []
   selectedArray: string[] = []
@@ -38,7 +38,7 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
    this.$CreationWindow = this.ToDoListCollectionService.closeOpenCreation.subscribe((x) => {this.collectionCreate = x});
    this.$EditWindow = this.ToDoListCollectionService.closeOpenEdit.subscribe((x) => {this.collectionEdit = x});
 
-   this.subGetCollection = this.ToDoListCollectionService.getCollections()
+   this.$getCollection = this.ToDoListCollectionService.getCollections()
    .subscribe(responseCollectionData => { 
      this.toDoListCollectionArray = responseCollectionData;
       console.log('FireStore collections recieved', this.toDoListCollectionArray)})
@@ -54,13 +54,12 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
     this.collectionCreate = !this.collectionCreate;
   }
 
-  onDeleteCollection(){
-
+  onDeleteCollection(index){
+    this.ToDoListCollectionService.deleteCollection(index);
   }
 
-  onCollectionOpen(i){
-    console.log('Collection Open', i)
-    this.router.navigate(['/todo']);
+  onCollectionOpen(index){
+    this.ToDoListCollectionService.getCollectionToDoList(index);
   }
 
 
@@ -78,6 +77,7 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.$CreationWindow.unsubscribe();
     this.$EditWindow.unsubscribe();
+    this.$getCollection.unsubscribe();
   }
 
   

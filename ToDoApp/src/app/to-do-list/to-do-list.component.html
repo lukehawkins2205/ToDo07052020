@@ -1,7 +1,11 @@
-<app-dynamic-collection *ngIf="toDoCreate"></app-dynamic-collection>
-<app-dynamic-collection-edit *ngIf="toDoEdit"></app-dynamic-collection-edit>
+
+<app-dynamic-todo-create *ngIf="toDoCreate"></app-dynamic-todo-create>
+<app-dynamic-todo-edit *ngIf="toDoEdit"></app-dynamic-todo-edit>
+
+<h2>{{collectionName}}</h2>
 
 
+<button (click)="onBackPage()" mat-raised-button color="primary">Back to Collections</button>
 <div>
     <mat-card>To Do panel page
         <button (click)="onDeleteToDoBatch()" mat-raised-button color="warn">Delete Batch</button>
@@ -13,11 +17,11 @@
 <br>
 
 <div 
-*ngFor ="let ToDoCollection of toDoListCollectionArray; let i = index">
+*ngFor ="let ToDo of toDoArray; let i = index">
     <br>
 <mat-card>
     <mat-checkbox (click)='onCompleted(i)'></mat-checkbox>
-    {{toDoArray.toDoName}}
+    {{ToDo.toDoName}}
 
     <button mat-button [matMenuTriggerFor]="menu">MORE</button>
 <mat-menu #menu="matMenu">
