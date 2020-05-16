@@ -2,20 +2,6 @@
     <mat-toolbar-row>
       <span>To Do App</span>
 
-      <button mat-button [matMenuTriggerFor]="menu">CollectionM</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="onCreateCollection()">Create</button>
-  <button mat-menu-item (click)="onDeleteCollections()">Delete</button>
-  <button mat-menu-item (click)="onEditCollections()">Edit</button>
-</mat-menu>
-
-<button mat-button [matMenuTriggerFor]="menu">ToDoM</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="onCreateToDoItem()">Create</button>
-  <button mat-menu-item (click)="onDeletToDoItems()">Delete</button>
-  <button mat-menu-item (click)="onEditToDoItems()">Edit</button>
-</mat-menu>
-
       
 
       <button (click)="onSignOut()" mat-raised-button color="warn">Sign Out</button>

@@ -1,9 +1,11 @@
 <app-dynamic-collection *ngIf="collectionCreate"></app-dynamic-collection>
+<app-dynamic-collection-edit *ngIf="collectionEdit"></app-dynamic-collection-edit>
 
 
 <div>
     <mat-card>collection panel page
-        <button *ngIf="collectionsDelete" (click)="onDeleteCollections()" mat-raised-button color="warn">Delete</button>
+        <button (click)="onDeleteCollections()" mat-raised-button color="warn">Delete Batch</button>
+        <button (click)="onAddCollection()" mat-raised-button color="primary">Create</button>
     </mat-card>
 </div>
 <br>
@@ -13,9 +15,17 @@
 <div 
 *ngFor ="let ToDoCollection of toDoListCollectionArray; let i = index">
     <br>
-<mat-card (click)='onCollectionClick(i)'>
+<mat-card>
     <mat-checkbox (click)='onCollectionSelected(i)'></mat-checkbox>
     {{ToDoCollection.collectionName}}
+
+    <button mat-button [matMenuTriggerFor]="menu">MORE</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onEditCollectioname(i)">Edit</button>
+  <button mat-menu-item (click)="onDeleteCollection()">Delete</button>
+</mat-menu>
+
+<button mat-button (click)="onCollectionOpen(i)">OPEN</button>
 </mat-card>
 </div>
 

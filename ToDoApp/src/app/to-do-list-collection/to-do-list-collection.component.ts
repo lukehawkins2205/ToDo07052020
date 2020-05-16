@@ -3,7 +3,8 @@ import { ToDoListCollection } from "./to-do-list-collection.model";
 import { ToDoListCollectionService } from "./to-do-list-collection.service";
 import { Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+
+import { Subscription, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -14,44 +15,69 @@ import { tap } from 'rxjs/operators';
 export class ToDoListCollectionComponent implements OnInit, OnDestroy {
 
   toDoListCollectionArray: ToDoListCollection[] = [];
-  collectionCreate: boolean = false;
-  private subCreationWindow: Subscription;
-  private subGetCollection: Subscription;
-  collectionsDelete: boolean = false;
+  
+  
+  subGetCollection: Subscription;
+  collectionsDelete: boolean = false; //this needs activating.
   selectedCollectionArray: ToDoListCollection[] = []
   selectedArray: string[] = []
-  
+  collectionUidTest: string;
 
+  //$editCollectionName = new Subject<boolean>();
+
+  collectionEdit: boolean = false;
+  collectionCreate: boolean = false;
+  $CreationWindow: Subscription;
+  $EditWindow: Subscription;
+  
+  index: number;
 
   constructor(private ToDoListCollectionService: ToDoListCollectionService, private router: Router) { }
 
   ngOnInit() {
-   this.subCreationWindow = this.ToDoListCollectionService.CloseOpen.subscribe((x) => {this.collectionCreate = x});
-   this.subGetCollection = this.ToDoListCollectionService.getCollections().subscribe(responseCollectionData => { this.toDoListCollectionArray = responseCollectionData; console.log('collection recieved', this.toDoListCollectionArray)})
+   this.$CreationWindow = this.ToDoListCollectionService.closeOpenCreation.subscribe((x) => {this.collectionCreate = x});
+   this.$EditWindow = this.ToDoListCollectionService.closeOpenEdit.subscribe((x) => {this.collectionEdit = x});
+
+   this.subGetCollection = this.ToDoListCollectionService.getCollections()
+   .subscribe(responseCollectionData => { 
+     this.toDoListCollectionArray = responseCollectionData;
+      console.log('FireStore collections recieved', this.toDoListCollectionArray)})
   };
+
+  onEditCollectioname(i){
+    this.ToDoListCollectionService.indexOfCollection(i);
+    this.collectionEdit = !this.collectionEdit;
+    
+  }
+
+  onAddCollection(){
+    this.collectionCreate = !this.collectionCreate;
+  }
+
+  onDeleteCollection(){
+
+  }
+
+  onCollectionOpen(i){
+    console.log('Collection Open', i)
+    this.router.navigate(['/todo']);
+  }
 
 
   onCollectionSelected(index: number){
-
-    this.toDoListCollectionArray[index].selected = !this.toDoListCollectionArray[index].selected;
-    
-    if(this.toDoListCollectionArray[index].selected === true){
-      this.selectedCollectionArray.push(this.toDoListCollectionArray[index])
-    }
-    
-    console.log('selectedarray length: ', this.selectedCollectionArray.length);
+    this.ToDoListCollectionService.collectionSelected(index);
   }
 
   onDeleteCollections(){
-
+    this.ToDoListCollectionService.deleteCollections();
   }
    
 
   
 
   ngOnDestroy() {
-    this.subCreationWindow.unsubscribe();
-    this.subGetCollection.unsubscribe();
+    this.$CreationWindow.unsubscribe();
+    this.$EditWindow.unsubscribe();
   }
 
   

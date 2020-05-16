@@ -1,10 +1,30 @@
+<app-dynamic-collection *ngIf="toDoCreate"></app-dynamic-collection>
+<app-dynamic-collection-edit *ngIf="toDoEdit"></app-dynamic-collection-edit>
+
+
+<div>
+    <mat-card>To Do panel page
+        <button (click)="onDeleteToDoBatch()" mat-raised-button color="warn">Delete Batch</button>
+        <button (click)="onAddToDo()" mat-raised-button color="primary">Add To Do</button>
+    </mat-card>
+</div>
+<br>
+<br>
+<br>
+
 <div 
-*ngFor ="let ToDoItem of ToDoItemArray; let i = index">
+*ngFor ="let ToDoCollection of toDoListCollectionArray; let i = index">
     <br>
 <mat-card>
-    <mat-checkbox (click)='onToggleTick(i)'>
-        {{ToDoItem.ToDo}}
-    </mat-checkbox>
+    <mat-checkbox (click)='onCompleted(i)'></mat-checkbox>
+    {{toDoArray.toDoName}}
+
+    <button mat-button [matMenuTriggerFor]="menu">MORE</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onEditToDo(i)">Edit</button>
+  <button mat-menu-item (click)="onDeleteToDo(i)">Delete</button>
+</mat-menu>
+
 </mat-card>
 </div>
 

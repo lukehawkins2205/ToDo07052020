@@ -21,6 +21,7 @@ export class AuthService {
   showButtonSubject = new Subject;
 
 
+
   authListener = this.afAuth.onAuthStateChanged(firebaseUser => {
 
     if(firebaseUser){
@@ -28,6 +29,7 @@ export class AuthService {
       this.user = new User(firebaseUser.email, firebaseUser.uid);
       console.log('User logged in: ', this.user.email);
       this.insertUserDatatoDB(this.user);
+      this.userSubject.next(firebaseUser);
       this.router.navigate(['/collections']);
 
     }else{

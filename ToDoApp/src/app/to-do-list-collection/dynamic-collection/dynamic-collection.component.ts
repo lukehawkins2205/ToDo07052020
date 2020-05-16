@@ -24,6 +24,10 @@ export class DynamicCollectionComponent implements OnInit {
 
 
 
+  onCancel(){
+    this.toDoCollectionService.creationWindow(false);  
+  }
+
   onSubmit(){
     this.toDoCollectionService.addCollection(this.Form.value.collectionName);
     this.Form.reset();

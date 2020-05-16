@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToDoListService } from './to-do-list.service';
-import { ToDoListItem } from './to-do-list-item.model'
+import { ToDo } from './to-do-list-item.model'
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -10,10 +10,10 @@ import { Subscription } from 'rxjs';
 })
 export class ToDoListComponent implements OnInit {
 
-  ToDoItemArray: ToDoListItem[] = []
-  index: number = 0;
-  subscription: Subscription;
+  toDoArray: ToDo[] = [];
 
+  toDoCreate: boolean = false;
+  toDoEdit: boolean = false;
 
  
 
@@ -21,17 +21,32 @@ export class ToDoListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.ToDoItemArray = this.ToDoListService.getToDoArray()
-    this.ToDoListService.PushListToDB()
-    this.subscription = this.ToDoListService.ToDoArrayChanged.subscribe((ToDoArrayChanged: ToDoListItem[]) => {this.ToDoItemArray = ToDoArrayChanged});
+  }
 
+  onAddToDo(){
+
+  }
+
+  onCompleted(i){
+    console.log(i);
+  }
+
+
+  onEditToDo(i){
+    console.log(i);
+  }
+
+
+  onDeleteToDo(i){
+    console.log(i);
+  }
+
+  onDeleteToDoBatch(){
+    
   }
 
   
-  onToggleTick(index: number){
-    this.ToDoItemArray[index].ticked = !this.ToDoItemArray[index].ticked;
-    this.ToDoListService.UpdateToDoArray(this.ToDoItemArray);
-  }
+ 
 
 
   

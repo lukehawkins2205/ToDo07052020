@@ -24,33 +24,5 @@ export class TaskbarComponent implements OnInit {
     })
   }
 
-
-  onCreateCollection(){
-    this.todoListCollectionService.creationWindow(true);
-  }
-
-  onDeleteCollections(){
-    this.todoListCollectionService.deleteCollections();
-  }
-
-  onEditCollections(){
-    this.todoListCollectionService.editCollections();
-  }
-
-
-  
-  onCreateToDoItem(){
-    this.toDoListService.createToDoItem();
-  }
-
-  onDeletToDoItems(){
-    this.toDoListService.deleteToDoItems();
-  }
-
-  onEditToDoItems(){
-    this.toDoListService.editToDoItems();
-  }
-
-  
-
+ 
 }

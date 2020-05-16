@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ToDoListComponent } from './to-do-list/to-do-list.component';
-import { HeaderComponent } from './header/header.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -34,6 +34,8 @@ import { ToDoListCollectionComponent } from './to-do-list-collection/to-do-list-
 import { TaskbarComponent } from './taskbar/taskbar.component';
 import { DynamicCollectionComponent } from './to-do-list-collection/dynamic-collection/dynamic-collection.component';
 import { SharedComponent } from './shared/shared.component';
+import { DynamicCollectionEditComponent } from "./to-do-list-collection/dynamic-collection/dynamic-collection-edit/dynamic-collection-edit.component";
+
 
 
 
@@ -45,13 +47,14 @@ import { SharedComponent } from './shared/shared.component';
   declarations: [
     AppComponent,
     ToDoListComponent,
-    HeaderComponent,
     AuthComponent,
     ErrorComponent,
     ToDoListCollectionComponent,
     TaskbarComponent,
     DynamicCollectionComponent,
     SharedComponent,
+    DynamicCollectionEditComponent
+    
     
     
     

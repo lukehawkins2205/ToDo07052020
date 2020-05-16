@@ -10,7 +10,7 @@ import { ToDoListCollectionComponent } from './to-do-list-collection/to-do-list-
 const routes: Routes = [
   {path: '', redirectTo: '/auth', pathMatch: 'full'},
   {path: 'auth', component: AuthComponent},
-  {path: 'collections', component: ToDoListCollectionComponent},
+  {path: 'collections', component: ToDoListCollectionComponent, canActivate: [AuthGuard]},
   {path: 'todo', component: ToDoListComponent, canActivate: [AuthGuard]}
   
 ];

@@ -1,18 +1,18 @@
 <div class="backdrop"></div>
 <div class="alert-box">
 
-
+    
     <mat-card><form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit()">
         <mat-form-field class="example-full-width">
-            <mat-label>Collection Name:</mat-label>
+            <mat-label>Edit Collection Name:</mat-label>
             <textarea formControlName="collectionName" matInput placeholder="Ex. Shopping List"></textarea>
           </mat-form-field>
           <br>
-            <button mat-raised-button color="accent" type="submit" [disabled]="!Form.valid">Create Collection</button>
+            <button mat-raised-button color="accent" type="submit" [disabled]="!Form.valid">Edit Collection</button>
         </form></mat-card>
  
 
   <div class="alert-box-actions">
-    <button class="btn btn-primary"  (click)="onCancel()">Cancel</button>
+    <button class="btn btn-primary" (click)="onCancel()">Cancel</button>
   </div>
 </div>
