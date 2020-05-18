@@ -21,7 +21,10 @@ export class ToDoListComponent implements OnInit, OnDestroy {
 
   $getTodo: Subscription;
   
-  collectionName: string = 'container x'
+  collectionName: string = 'container name'
+
+
+  $serviceToDo: Subscription
   
 
  
@@ -32,10 +35,10 @@ export class ToDoListComponent implements OnInit, OnDestroy {
     this.$CreationWindow = this.toDoListService.closeOpenCreation.subscribe((x) => {this.toDoCreate = x});
    this.$EditWindow = this.toDoListService.closeOpenEdit.subscribe((x) => {this.toDoEdit = x});
 
-   this.$getTodo = this.toDoListService.getToDo()
-   .subscribe(responseData => { 
-     this.toDoArray = responseData;
-      console.log('FireStore To-Do recieved', this.toDoArray)})
+   //this.$getTodo = this.toDoListService.todoArrayNext.subscribe(x => {this.toDoArray = x; console.log('comp array next', x)})
+   this.$serviceToDo = this.toDoListService.getToDo().subscribe((x: ToDo[])=>{this.toDoArray = x;});
+
+  
   }
 
   onAddToDo(){
@@ -71,6 +74,8 @@ export class ToDoListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.$CreationWindow.unsubscribe();
+    this.$EditWindow.unsubscribe();
+    this.$getTodo.unsubscribe();
     this.$EditWindow.unsubscribe();
   }
 

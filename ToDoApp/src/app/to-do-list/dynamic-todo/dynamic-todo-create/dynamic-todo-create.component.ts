@@ -15,7 +15,8 @@ export class DynamicTodoCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.Form = new FormGroup({
-      'toDoName': new FormControl(null, Validators.required)
+      'toDoName': new FormControl(null, Validators.required),
+      'toDoDueDate': new FormControl(null, Validators.required)
     });
   }
 
@@ -25,7 +26,7 @@ export class DynamicTodoCreateComponent implements OnInit {
 
   onSubmit(){
    
-    this.toDoService.addToDo(this.Form.value.toDoName);
+    this.toDoService.addToDo(this.Form.value.toDoName, this.Form.value.toDoDueDate);
     this.Form.reset();
     this.toDoService.creationWindow(false);    
   }

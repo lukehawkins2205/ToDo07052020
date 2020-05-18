@@ -27,6 +27,12 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 
 import {FormsModule} from '@angular/forms'
 
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+
+
+
+
 
 
 import { environment } from 'src/environments/environment';
@@ -87,11 +93,14 @@ import { DynamicTodoEditComponent } from "./to-do-list/dynamic-todo/dynamic-todo
     AngularFirestoreModule,
     AngularFireAuthModule,
     FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+    
     
    
     
   ],
-  providers: [SharedComponent],
+  providers: [SharedComponent, ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

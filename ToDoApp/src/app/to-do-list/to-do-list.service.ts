@@ -1,10 +1,10 @@
 import { Injectable, OnInit } from '@angular/core';
 import { ToDo } from './to-do-list-item.model'
 import { HttpClient } from '@angular/common/http';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, of } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { SharedComponent } from '../shared/shared.component';
 
 @Injectable({
@@ -18,6 +18,8 @@ export class ToDoListService {
   userUid: string;
 
   toDoArray: ToDo[] = [];
+
+  todoArrayNext = new Subject<ToDo[]>();
 
   collectionUid: string;
   collectionName: string;
@@ -44,24 +46,54 @@ export class ToDoListService {
   }
 
 
-  getToDo(){
 
-  return this.fireStoreDB.collection<ToDo>('ToDo', ref => ref.where('toDoCollectionUid', '==', `${this.collectionUid}`)).valueChanges()
-  .pipe(tap(ArrayReponse => {
-    this.toDoArray = ArrayReponse;
-  }))
+
+  
+
+getToDo(){
+ return this.fireStoreDB.collection<ToDo>('ToDo', ref => ref.where('toDoCollectionUid', '==', `${this.collectionUid}`)).valueChanges()
+ .pipe(map((resArray) =>{
+   return resArray.map(toDo =>{
+    var todayDate = new Date();
+        if(toDo.toDoCompleteBy < todayDate){
+          toDo.toDoOverdue = true;} })
+        })),
+    tap<ToDo[]>((res)=>{this.toDoArray = res;})
+ 
   }
 
 
 
-  addToDo(toDo: string){
+  
+  /*tap(toDoArrayResponse =>{
+   this.toDoArray = toDoArrayResponse
+  console.log('Recieved toDoarray', this.toDoArray)}
+    ))
+  }*/
+
+  /*overDueCheck(toDoArray: ToDo[]){
+    var todayDate = new Date();
+    var index = 0;
+      toDoArray .forEach(toDo => {
+        if(toDo.toDoCompleteBy < todayDate){
+          toDo.toDoOverdue = true;
+          console.log('todo is overdue', toDoArray[index].toDoName);
+        }
+        })
+      this.todoArrayNext.next(toDoArray);
+     
+  }*/
+
+
+
+  addToDo(toDo: string, dueDate: Date){
 
     const toDoUid = this.sharedRandom.makeid();
     const toDoCollectionUid = this.collectionUid;
-    const toDoName = toDo
+    const toDoName = toDo;
     const toDoCompleted = false;
-    const toDoCompleteBy = new Date(2020, 11, 24);
-    const toDoCreated = new Date(2020, 5, 22);
+    const toDoCompleteBy = dueDate;
+    const toDoCreated =  new Date();
     const toDoOverdue = false;
 
     const toDoObj = new ToDo(toDoUid, toDoCollectionUid, toDoName, toDoCompleted, toDoCompleteBy, toDoCreated, toDoOverdue);

@@ -4,10 +4,22 @@
 
     <mat-card><form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit()">
         <mat-form-field class="example-full-width">
-            <mat-label>To Do Name:</mat-label>
+            <mat-label>To Do:</mat-label>
             <textarea formControlName="toDoName" matInput placeholder="Ex. Get Eggs"></textarea>
           </mat-form-field>
           <br>
+
+
+          <mat-form-field>
+            <mat-label>Due:</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="toDoDueDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <br>
+
+
             <button mat-raised-button color="accent" type="submit" [disabled]="!Form.valid">Create To Do</button>
         </form></mat-card>
  
