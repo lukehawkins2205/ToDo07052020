@@ -4,7 +4,7 @@
 
       
 
-      <button (click)="onSignOut()" mat-raised-button color="warn">Sign Out</button>
+      <button (click)="onSignOut()" mat-button class="topright" *ngIf="show">Sign Out</button>
     </mat-toolbar-row>
   </mat-toolbar>
 

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { AngularFireModule } from "@angular/fire";
 import * as firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { ɵTestingCompiler, TestBed } from '@angular/core/testing';
+import { ErrorComponent } from '../error/error.component';
 
 
 
@@ -20,11 +21,20 @@ import { ɵTestingCompiler, TestBed } from '@angular/core/testing';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
+
+  errorShow: boolean = false; 
+
+  $error: Subscription;
+  $error1: Subscription;
+  
 
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private errorComp: ErrorComponent) {}
   ngOnInit(): void {
+
+    this.$error = this.errorComp.errorClose.subscribe(close => {  this.errorShow = close; console.log('errorclose', this.errorShow)});
+    this.$error1 = this.authService.errorShow1.subscribe(open => {this.errorShow = open});
 
     this.Form = new FormGroup({
       'email': new FormControl(null, Validators.required),
@@ -33,29 +43,26 @@ export class AuthComponent implements OnInit {
 
   }
 
-
-  
   
 
   Form: FormGroup;
   btnSignUp: boolean;
 
 
-    onLoginType(loginType: string){
+      
+    onSubmit(loginType: string){
       if(loginType === 'signup')
       {
-        this.btnSignUp = true;
-      }else{
-        this.btnSignUp = false;
-      }
-    }
-      
-    onSubmit(){
-      if(this.btnSignUp){
         this.authService.signUp(this.Form.value.email, this.Form.value.password);
       }else{
         this.authService.signIn(this.Form.value.email, this.Form.value.password);
       }
+    }
+
+
+    ngOnDestroy(){
+      this.$error.unsubscribe();
+      this.$error1.unsubscribe();
     }
         
 

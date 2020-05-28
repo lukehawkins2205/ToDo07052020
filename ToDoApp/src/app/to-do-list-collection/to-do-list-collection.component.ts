@@ -4,8 +4,10 @@ import { ToDoListCollectionService } from "./to-do-list-collection.service";
 import { Router } from '@angular/router';
 
 
+
 import { Subscription, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-to-do-list-collection',
@@ -32,6 +34,9 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
   
   index: number;
 
+  isFetching = true;
+  deleteMode = false;
+
   constructor(private ToDoListCollectionService: ToDoListCollectionService, private router: Router) { }
 
   ngOnInit() {
@@ -40,6 +45,7 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
 
    this.$getCollection = this.ToDoListCollectionService.getCollections()
    .subscribe(responseCollectionData => { 
+     this.isFetching = false; 
      this.toDoListCollectionArray = responseCollectionData;
       console.log('FireStore collections recieved', this.toDoListCollectionArray)})
   };
@@ -55,6 +61,7 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
   }
 
   onDeleteCollection(index){
+    this.deleteMode = true;
     this.ToDoListCollectionService.deleteCollection(index);
   }
 
@@ -69,6 +76,11 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
 
   onDeleteCollections(){
     this.ToDoListCollectionService.deleteCollections();
+  }
+
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.toDoListCollectionArray, event.previousIndex, event.currentIndex);
   }
    
 

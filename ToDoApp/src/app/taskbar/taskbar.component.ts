@@ -1,27 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { ToDoListCollectionService } from '../to-do-list-collection/to-do-list-collection.service';
 import { ToDoListService } from '../to-do-list/to-do-list.service';
+import { AuthService } from '../auth/auth.service';
+import { unescapeIdentifier } from '@angular/compiler';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-taskbar',
   templateUrl: './taskbar.component.html',
   styleUrls: ['./taskbar.component.css']
 })
-export class TaskbarComponent implements OnInit {
+export class TaskbarComponent implements OnInit, OnDestroy {
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private todoListCollectionService: ToDoListCollectionService, private toDoListService: ToDoListService) { }
+  subscription: Subscription
+
+  constructor(private afAuth: AngularFireAuth, private router: Router, private afService: AuthService) { 
+    this.subscription = this.afService.signOutButtonSubject.subscribe(x => this.show = x)
+    
+  }
+
+  show: boolean = true; 
+
 
   ngOnInit(): void {
   }
 
   onSignOut(){
+    this.show = false; 
     this.afAuth.signOut().then(x => {
       this.router.navigate(['/auth'])
     }).catch(x => {
       console.log(x.message);
     })
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
  

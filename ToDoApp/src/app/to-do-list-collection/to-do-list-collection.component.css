@@ -1,0 +1,15 @@
+.center {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+  }
+
+
+
+  .text1{
+    color: rgb(0, 0, 0);
+    font-weight: 100;
+}

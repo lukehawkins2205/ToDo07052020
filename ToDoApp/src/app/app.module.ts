@@ -8,11 +8,12 @@ import { ToDoListComponent } from './to-do-list/to-do-list.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -20,6 +21,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthComponent } from './auth/auth.component';
 import { ErrorComponent } from './error/error.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -29,6 +31,10 @@ import {FormsModule} from '@angular/forms'
 
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
+
+
 
 
 
@@ -68,6 +74,7 @@ import { DynamicTodoEditComponent } from "./to-do-list/dynamic-todo/dynamic-todo
     DynamicCollectionEditComponent,
     DynamicTodoCreateComponent,
     DynamicTodoEditComponent,
+    ErrorComponent
     
 
     
@@ -94,13 +101,19 @@ import { DynamicTodoEditComponent } from "./to-do-list/dynamic-todo/dynamic-todo
     AngularFireAuthModule,
     FormsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatGridListModule,
+    DragDropModule,
+    MatExpansionModule
     
     
    
     
   ],
-  providers: [SharedComponent, ],
+  providers: [SharedComponent, ErrorComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

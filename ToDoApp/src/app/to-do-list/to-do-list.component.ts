@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToDoListService } from './to-do-list.service';
 import { ToDo } from './to-do-list-item.model'
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { Router } from '@angular/router';
+
+
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-to-do-list',
@@ -12,6 +15,7 @@ import { Router } from '@angular/router';
 export class ToDoListComponent implements OnInit, OnDestroy {
 
   toDoArray: ToDo[] = [];
+  completedToDoArray: ToDo[] = [];
 
   toDoCreate: boolean = false;
   toDoEdit: boolean = false;
@@ -21,24 +25,46 @@ export class ToDoListComponent implements OnInit, OnDestroy {
 
   $getTodo: Subscription;
   
-  collectionName: string = 'container name'
+  collectionName: string = this.toDoListService.collectionName;
 
 
   $serviceToDo: Subscription
+
+  complete: boolean = false; 
+
+  isFetching = true;
   
+  $toDoSort: Subscription;
+
+  $toDoCompleted1: Subscription;
+
+  sortOption: string = '';
+
 
  
 
   constructor(private toDoListService: ToDoListService, private router: Router) { }
 
   ngOnInit() {
-    this.$CreationWindow = this.toDoListService.closeOpenCreation.subscribe((x) => {this.toDoCreate = x});
-   this.$EditWindow = this.toDoListService.closeOpenEdit.subscribe((x) => {this.toDoEdit = x});
+    this.$CreationWindow = this.toDoListService.closeOpenCreation.subscribe((x) => {
+      this.toDoCreate = x});
 
-   //this.$getTodo = this.toDoListService.todoArrayNext.subscribe(x => {this.toDoArray = x; console.log('comp array next', x)})
-   this.$serviceToDo = this.toDoListService.getToDo().subscribe((x: ToDo[])=>{this.toDoArray = x;});
+   this.$EditWindow = this.toDoListService.closeOpenEdit.subscribe((x) => {
+     this.toDoEdit = x});
+
+   this.$toDoSort = this.toDoListService.todoArrayNext.subscribe(sortedtoDoArray => {
+     this.isFetching = false; 
+     this.toDoArray = sortedtoDoArray
+    });
+
+    this.$toDoCompleted1 = this.toDoListService.getToDoCompleted().subscribe((x) => {this.completedToDoArray = x});
 
   
+    this.$serviceToDo = this.toDoListService.getToDo().subscribe(()=>{
+      
+      this.toDoListService.sort(this.sortOption);
+    
+  })
   }
 
   onAddToDo(){
@@ -55,6 +81,10 @@ export class ToDoListComponent implements OnInit, OnDestroy {
     this.toDoListService.Completed(i);
   }
 
+  onUnComplete(i){
+    this.toDoListService.unCompleted(i);
+  }
+
 
   onEditToDo(i){
     this.toDoListService.indexOfCollection(i);
@@ -66,23 +96,43 @@ export class ToDoListComponent implements OnInit, OnDestroy {
     this.toDoListService.deleteToDo(i);
   }
 
+  onDeleteCompletedToDo(i){
+    this.toDoListService.deleteCompletedToDo(i);
+  }
+
   onDeleteToDoBatch(){
     console.log('hi')
   }
 
 
 
-  ngOnDestroy() {
-    this.$CreationWindow.unsubscribe();
-    this.$EditWindow.unsubscribe();
-    this.$getTodo.unsubscribe();
-    this.$EditWindow.unsubscribe();
+  onSort(option: string){
+    this.sortOption = option;
+    this.toDoListService.sort(option);
+    
+  }
+  
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.toDoArray, event.previousIndex, event.currentIndex);
   }
 
   
- 
 
+
+  ngOnDestroy() {
+    this.$CreationWindow.unsubscribe();
+    this.$EditWindow.unsubscribe();
+    this.$toDoSort.unsubscribe();
+    this.$EditWindow.unsubscribe();
+    this.$toDoCompleted1.unsubscribe();
+  }
 
   
 
+}
+
+
+export class ExpansionOverviewExample {
+  panelOpenState = false;
 }

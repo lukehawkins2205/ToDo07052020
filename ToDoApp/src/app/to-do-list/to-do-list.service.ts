@@ -6,6 +6,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { tap, map } from 'rxjs/operators';
 import { SharedComponent } from '../shared/shared.component';
+import { firestore } from 'firebase';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +20,11 @@ export class ToDoListService {
   userUid: string;
 
   toDoArray: ToDo[] = [];
+  completedToDoArray: ToDo[] = [];
 
   todoArrayNext = new Subject<ToDo[]>();
+  todoSort = new Subject<string>();
+  completedToDoArrayNext = new Subject<ToDo[]>();
 
   collectionUid: string;
   collectionName: string;
@@ -47,48 +52,33 @@ export class ToDoListService {
 
 
 
-
-  
-
 getToDo(){
  return this.fireStoreDB.collection<ToDo>('ToDo', ref => ref.where('toDoCollectionUid', '==', `${this.collectionUid}`)).valueChanges()
- .pipe(map((resArray) =>{
-   return resArray.map(toDo =>{
-    var todayDate = new Date();
-        if(toDo.toDoCompleteBy < todayDate){
-          toDo.toDoOverdue = true;} })
-        })),
-    tap<ToDo[]>((res)=>{this.toDoArray = res;})
- 
+ .pipe(
+   tap(toDoArrayRes => {
+     //this.dateAndOverDueConversion(res);
+     this.toDoArray = toDoArrayRes;
+     this.toDoConversionHandler(this.toDoArray)
+     console.log('TAP SERVICE ARRAY', this.toDoArray)
+    }))
   }
 
-
-
-  
-  /*tap(toDoArrayResponse =>{
-   this.toDoArray = toDoArrayResponse
-  console.log('Recieved toDoarray', this.toDoArray)}
-    ))
-  }*/
-
-  /*overDueCheck(toDoArray: ToDo[]){
-    var todayDate = new Date();
-    var index = 0;
-      toDoArray .forEach(toDo => {
-        if(toDo.toDoCompleteBy < todayDate){
-          toDo.toDoOverdue = true;
-          console.log('todo is overdue', toDoArray[index].toDoName);
-        }
-        })
-      this.todoArrayNext.next(toDoArray);
-     
-  }*/
+  getToDoCompleted(){
+    return this.fireStoreDB.collection<ToDo>('ToDoCompleted', ref => ref.where('toDoCollectionUid', '==', `${this.collectionUid}`)).valueChanges()
+    .pipe(
+      tap(toDoArrayRes => {
+        //this.dateAndOverDueConversion(res);
+        this.completedToDoArray = toDoArrayRes;
+        this.toDoConversionHandler(this.completedToDoArray)
+        console.log('TAP SERVICE Completed ARRAY', this.completedToDoArray)
+       }))
+     }
 
 
 
   addToDo(toDo: string, dueDate: Date){
 
-    const toDoUid = this.sharedRandom.makeid();
+    const toDoUid = this.fireStoreDB.createId();
     const toDoCollectionUid = this.collectionUid;
     const toDoName = toDo;
     const toDoCompleted = false;
@@ -108,27 +98,65 @@ getToDo(){
       toDoOverdue: false
       
     }).then(() => {}).catch(x => {console.log('error', x.message)})
+
+
+  }
+
+
+  Completed(index){
+
+    this.toDoArray[index].toDoCompleted = true;
+    
+    if(this.toDoArray[index].toDoCompleted === true){
+      this.fireStoreDB.collection('ToDoCompleted').doc(`${this.toDoArray[index].toDoUid}`).set({
+        toDoUid: this.toDoArray[index].toDoUid,
+        toDoCollectionUid: this.toDoArray[index].toDoCollectionUid,
+        toDoName: this.toDoArray[index].toDoName,
+        toDoCompleted: true,
+        toDoCompleteBy: this.toDoArray[index].toDoCompleteBy,
+        toDoCreated: this.toDoArray[index].toDoCreated,
+        toDoOverdue: this.toDoArray[index].toDoOverdue
+        }).then(() => {console.log('added to completed collection')}).catch(x => {console.log('error1', x.message)})
+  
+        this.fireStoreDB.collection('ToDo').doc(`${this.toDoArray[index].toDoUid}`).delete()
+        .then(()=>{console.log('deleted from main collection')}).catch(error => console.log('error2',error.message)); 
+    }
+  }
+
+  unCompleted(index){
+   
+      this.fireStoreDB.collection('ToDo').doc(`${this.completedToDoArray[index].toDoUid}`).set({
+        toDoUid: this.completedToDoArray[index].toDoUid,
+        toDoCollectionUid: this.completedToDoArray[index].toDoCollectionUid,
+        toDoName: this.completedToDoArray[index].toDoName,
+        toDoCompleted: false,
+        toDoCompleteBy: this.completedToDoArray[index].toDoCompleteBy,
+        toDoCreated: this.completedToDoArray[index].toDoCreated,
+        toDoOverdue: this.completedToDoArray[index].toDoOverdue
+        }).then(() => {console.log('added to main collection')}).catch(x => {console.log('error1', x.message)})
+  
+        this.fireStoreDB.collection('ToDoCompleted').doc(`${this.completedToDoArray[index].toDoUid}`).delete()
+        .then(()=>{console.log('deleted from completed collection')}).catch(error => console.log('error2',error.message)); 
+  
   }
 
 
 
-  Completed(completed: boolean){
+  editToDo(toDo: string, dueDate: Date){
 
-    completed = !completed
+    if(dueDate === null){
+      dueDate = this.toDoArray[this.index].toDoCompleteBy;
+    }
+
+    if(toDo === null){
+      toDo = this.toDoArray[this.index].toDoName;
+    }
 
     this.fireStoreDB.collection('ToDo').doc(`${this.toDoArray[this.index].toDoUid}`).update({
-      'toDoCompleted': completed
+      'toDoName': toDo,
+      'toDoCompleteBy': dueDate
     }).then(()=>{}).catch(error => console.log(error.message)); 
   }
-
-
-
-  editToDo(newtoDoName: string){
-    this.fireStoreDB.collection('ToDo').doc(`${this.toDoArray[this.index].toDoUid}`).update({
-      'toDoName': newtoDoName
-    }).then(()=>{}).catch(error => console.log(error.message)); 
-  }
-
 
 
   deleteToDo(index){
@@ -137,8 +165,67 @@ getToDo(){
       .then(()=>{}).catch(error => console.log(error.message)); 
   }
 
+  deleteCompletedToDo(index){
+    console.log('You Have Deleted: ',this.completedToDoArray[index].toDoName);
+    this.fireStoreDB.collection('ToDoCompleted').doc(`${this.completedToDoArray[index].toDoUid}`).delete()
+      .then(()=>{}).catch(error => console.log(error.message)); 
+
+  }
 
 
+  toDoConversionHandler(toDoArray: ToDo[]){
+    toDoArray.forEach(toDo => {
+      var completeBy = toDo.toDoCompleteBy.toDate();
+      var todayDate = new Date()
+
+      if(completeBy <= todayDate)
+      {
+        toDo.toDoOverdue = true;
+
+      }else{
+        toDo.toDoOverdue = false;
+      }
+      toDo.toDoCompleteBy = completeBy;
+      
+      var timedif = toDo.toDoCompleteBy.getTime() - todayDate.getTime()
+      var daydif = timedif / (1000 * 3600 * 24);
+      var myTrunc = Math.trunc( daydif );
+      toDo.daysRemaining = myTrunc 
+    })
+  }
+  
+
+ 
+
+  sort(option: string){
+    switch (option){
+      case 'CreatedDate': 
+        this.toDoArray.sort((todo1, todo2) => {
+          return todo1.toDoCreated - todo2.toDoCreated});
+        this.todoArrayNext.next(this.toDoArray);  
+        break;
+
+      case 'DueDate':
+        this.toDoArray.sort((todo1, todo2) => {
+          return todo1.toDoCompleteBy - todo2.toDoCompleteBy});
+        this.todoArrayNext.next(this.toDoArray);
+        break;
+
+      case 'OverdueStatus':
+        this.toDoArray.sort((todo1, todo2) => {
+        if (todo1.toDoOverdue === true)
+          {return -1;} 
+        if (todo2.toDoOverdue === false)
+          {return 1;} 
+          return 0;});
+          this.todoArrayNext.next(this.toDoArray);
+          break;
+
+      default: 
+          this.todoArrayNext.next(this.toDoArray);
+
+    }
+  }
   
 
 

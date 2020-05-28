@@ -2,34 +2,120 @@
 <app-dynamic-todo-create *ngIf="toDoCreate"></app-dynamic-todo-create>
 <app-dynamic-todo-edit *ngIf="toDoEdit"></app-dynamic-todo-edit>
 
-<h2>{{collectionName}}</h2>
+<div class="row">
+    <div class="col">
+        <h2>{{collectionName}}</h2>
+    </div>
+    <div class="col">
+        <div class="d-flex justify-content-center"><button (click)="onBackPage()" mat-button color="primary">Back to Collections</button></div>
+        
+    </div>
+</div>
 
-
-<button (click)="onBackPage()" mat-raised-button color="primary">Back to Collections</button>
 <div>
-    <mat-card>To Do panel page
-        <button (click)="onDeleteToDoBatch()" mat-raised-button color="warn">Delete Batch</button>
-        <button (click)="onAddToDo()" mat-raised-button color="primary">Add To Do</button>
+    <mat-card>
+        <div class="row">
+            <div class="col"><h3>To Dos'</h3></div>
+            <div class="col">  <button (click)="onAddToDo()" mat-raised-button color="primary" class="pushright" >Add To Do</button></div>
+            <div class="col"> <button (click)="onDeleteToDoBatch()" mat-raised-button color="warn" class="pushright">Delete Batch</button></div>
+
+            
+
+            <div class="col">
+                <button mat-button [matMenuTriggerFor]="menu">SORT</button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="onSort('CreatedDate')">Created Date</button>
+                  <button mat-menu-item (click)="onSort('DueDate')">Due Date</button>
+                  <button mat-menu-item (click)="onSort('OverdueStatus')">Overdue Status</button>
+                </mat-menu>
+            </div>
+
+
+          </div>
     </mat-card>
 </div>
 <br>
 <br>
 <br>
+<div class="d-flex justify-content-center"  *ngIf="isFetching"><mat-spinner></mat-spinner></div>
 
-<div 
-*ngFor ="let ToDo of toDoArray; let i = index">
-    <br>
-<mat-card>
-    <mat-checkbox (click)='onCompleted(i)'></mat-checkbox>
-    {{ToDo.toDoName}}
 
-    <button mat-button [matMenuTriggerFor]="menu">MORE</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="onEditToDo(i)">Edit</button>
-  <button mat-menu-item (click)="onDeleteToDo(i)">Delete</button>
-</mat-menu>
 
-</mat-card>
+<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+
+    <div *ngFor ="let ToDo of toDoArray; let i = index" cdkDrag>
+        <br>
+    <mat-card>
+        <div class="row">
+            <div class="col">
+                <mat-checkbox (click)='onCompleted(i)'></mat-checkbox>
+            </div>
+            <div class="col">
+                <h3>{{ToDo.toDoName}}</h3> 
+            </div>
+            <div class="col">
+                <mat-label class="overdue" *ngIf="ToDo.toDoOverdue && !ToDo.toDoCompleted">OVERDUE</mat-label>
+            </div>
+            <div class="col" *ngIf="!ToDo.toDoCompleted">
+                <h3>Due:{{ToDo.toDoCompleteBy | date: 'shortDate' }}</h3>
+            </div>
+            <div class="col" *ngIf="!ToDo.toDoCompleted && !ToDo.toDoOverdue">
+                <h3 >Days Remaining:{{ToDo.daysRemaining}}</h3>
+            </div>
+            <div class="col">
+                <button mat-button [matMenuTriggerFor]="menu">MORE</button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="onEditToDo(i)">Edit</button>
+                  <button mat-menu-item (click)="onDeleteToDo(i)">Delete</button>
+                </mat-menu>
+            </div>
+    
+          </div>
+    </mat-card>
+    </div>
 </div>
+<br>
+
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Completed Tasks
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  
+    
+    <div *ngFor ="let ToDo of completedToDoArray; let i = index">
+        <br>
+    <mat-card>
+        <div class="row">
+            <div class="col">
+                <mat-checkbox (click)='onUnComplete(i)'></mat-checkbox>
+            </div>
+            <div class="col">
+                <h3 [ngClass]="{Complete: ToDo.toDoCompleted}" >{{ToDo.toDoName}}</h3> 
+            </div>
+            <div class="col">
+                  <button mat-button color="primary" (click)="onDeleteCompletedToDo(i)">Delete</button>
+            </div>
+    
+          </div>
+    </mat-card>
+    </div>
+
+
+
+
+
+
+
+  
+  </mat-expansion-panel>
+
+
+
+
+
+
+
 
 

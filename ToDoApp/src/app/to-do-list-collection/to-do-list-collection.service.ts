@@ -8,6 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { SharedComponent } from '../shared/shared.component';
 import { tap } from 'rxjs/operators';
 import { ToDoListService } from '../to-do-list/to-do-list.service';
+import { AuthService } from '../auth/auth.service';
 
 
 
@@ -28,10 +29,10 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   
   toDoListCollectionArray: ToDoListCollection[] = []; 
   selectedCollectionArray: ToDoListCollection[] = [];
-  userUid: string;
 
 
-  constructor(private router: Router, private fireStoreDB: AngularFirestore, private afAuth: AngularFireAuth, private sharedRandom: SharedComponent, private toDoService: ToDoListService) {
+
+  constructor(private router: Router, private fireStoreDB: AngularFirestore, private afAuth: AngularFireAuth, private sharedRandom: SharedComponent, private toDoService: ToDoListService, private afService: AuthService) {
   
   }
 
@@ -65,11 +66,8 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   }
 
   getCollections(){
-
-    var user = this.afAuth.currentUser;
-    user.then(x => {this.userUid = x.uid}).catch(error => console.log(error.message));
     
-  return this.fireStoreDB.collection<ToDoListCollection>('Collections', ref => ref.where('userUid', '==', `${this.userUid}`)).valueChanges()
+  return this.fireStoreDB.collection<ToDoListCollection>('Collections', ref => ref.where('userUid', '==', `${this.afService.user.uid}`)).valueChanges()
   .pipe(tap(CollectionArrayReponse => {
     this.toDoListCollectionArray = CollectionArrayReponse;
   }))
@@ -89,10 +87,10 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
 
   addCollection(CollectionName: string){
     
-    const toDoListsUid = ['toDoListUIDTest1', 'toDoListUIDTest2', 'toDoListUIDTest3']
+    const toDoListsUid = []
     const collectionUid = this.sharedRandom.makeid();
     const selected = false;
-    const collectionObj = new ToDoListCollection(CollectionName, toDoListsUid, this.userUid, collectionUid, selected)
+    const collectionObj = new ToDoListCollection(CollectionName, toDoListsUid, this.afService.user.uid, collectionUid, selected)
 
     this.fireStoreDB.collection('Collections').doc(collectionObj.collectionUid).set({
       collectionName: collectionObj.collectionName,
@@ -124,12 +122,25 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
     }
     this.selectedCollectionArray = [];
     console.log('selected container after delete function', this.selectedCollectionArray)
+
+
+
+
+
+
   }
 
   deleteCollection(index){
-    console.log('You Have Deleted: ',this.toDoListCollectionArray[index].collectionName);
+
+  //  var toDoArrayUid: string[] = this.toDoListCollectionArray[index].toDoListUid
+
+   /* for(let index = 0; toDoArrayUid.length; index++)
+      this.fireStoreDB.collection('ToDo').doc(`${toDoArrayUid[index]}`).delete()
+    .then(()=>{}).catch(error => console.log(error.message)); */
+
     this.fireStoreDB.collection('Collections').doc(`${this.toDoListCollectionArray[index].collectionUid}`).delete()
     .then(()=>{}).catch(error => console.log(error.message)); 
+
   }
 
   

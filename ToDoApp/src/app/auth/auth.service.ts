@@ -19,6 +19,7 @@ export class AuthService {
   userSubject = new Subject<User>();
   user: User;
   showButtonSubject = new Subject;
+  signOutButtonSubject = new Subject<boolean>();
 
 
 
@@ -42,16 +43,22 @@ export class AuthService {
 
 
   
- 
+  errorShow = new Subject<string>();
+  errorShow1 = new Subject<boolean>();
 
+
+  errorMes: string;
   signUp(email: string, password: string){
   const signUpPromise = this.afAuth.createUserWithEmailAndPassword(email, password);
-  signUpPromise.catch(error => console.log(error.message));
+  signUpPromise.catch(error => console.log(error)); 
+  //console.log(this.errorMes); this.errorShow1.next(true); this.errorShow.next(this.errorMes);
+  this.signOutButtonSubject.next(true);
   }
 
   signIn(email: string, password: string){
     const signInPromise = this.afAuth.signInWithEmailAndPassword(email, password);
-    signInPromise.catch(error => console.log(error.message));
+    signInPromise.catch(error => {console.log(error.message);});
+    this.signOutButtonSubject.next(true);
   }
 
 

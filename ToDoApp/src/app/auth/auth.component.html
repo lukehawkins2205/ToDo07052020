@@ -1,40 +1,59 @@
-<mat-card><mat-card-title>Sign Up / Log In</mat-card-title>
-    <br>
-    <button mat-raised-button color="primary" (click)="onLoginType('signup')" >Sign Up</button>
-    <button mat-raised-button color="primary" (click)="onLoginType('signin')">Sign In</button>
-    <br>
- <br>
- <app-error></app-error>
-<div *ngIf="btnSignUp">
-    <form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit()">
-        <mat-form-field class="example-full-width">
-            <mat-label>Email:</mat-label>
-            <input type="email" formControlName="email"  matInput email>
-        </mat-form-field>
-            <br>
-            <mat-form-field class="example-full-width">
-            <mat-label>Password:</mat-label>
-            <input type="password" formControlName="password"  matInput>
-          </mat-form-field>
-          <br>
-            <button mat-raised-button color="primary" type="submit" [disabled]="!Form.valid">Sign Up</button>
-        </form>   
-    </div>
+<app-error *ngIf="errorShow"></app-error>
 
-    <div *ngIf="btnSignUp === false">
-        <form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit()">
-            <mat-form-field class="example-full-width">
-                <mat-label>Email:</mat-label>
-                <input type="email" formControlName="email"  matInput email>
-            </mat-form-field>
-                <br>
+
+<mat-card class="center">
+    <br>
+    
+<div class="d-flex justify-content-center">
+
+    <mat-tab-group>
+        <mat-tab label="Sign Up" > 
+        <div>
+            <br>
+            <form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit('signup')">
                 <mat-form-field class="example-full-width">
-                <mat-label>Password:</mat-label>
-                <input type="password" formControlName="password"  matInput>
-              </mat-form-field>
-              <br>
-                <button mat-raised-button color="primary" type="submit" [disabled]="!Form.valid">Sign In</button>
-            </form>   
-        </div>
+                    <mat-label>Email:</mat-label>
+                    <input type="email" formControlName="email"  matInput email>
+                </mat-form-field>
+                    <br>
+                    <mat-form-field class="example-full-width">
+                    <mat-label>Password:</mat-label>
+                    <input type="password" formControlName="password"  matInput>
+                  </mat-form-field>
+                  <br>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!Form.valid">Sign Up</button>
+                </form>   
+            </div>
+        </mat-tab>
+    
+        <mat-tab label="Sign In">
+    <br>
+        <div >
+            <form class="example-form" [formGroup]="Form" (ngSubmit)="onSubmit('signin')">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email:</mat-label>
+                    <input type="email" formControlName="email"  matInput email>
+                </mat-form-field>
+                    <br>
+                    <mat-form-field class="example-full-width">
+                    <mat-label>Password:</mat-label>
+                    <input type="password" formControlName="password"  matInput>
+                  </mat-form-field>
+                  <br>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!Form.valid">Sign In</button>
+                </form>   
+            </div>
+        </mat-tab>
+    
+    
+    
+      </mat-tab-group>
+
+</div>
+
+  <br>
+
+
+ 
 
 </mat-card>

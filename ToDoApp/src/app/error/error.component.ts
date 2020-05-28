@@ -1,15 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription, Subject } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-error',
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.css']
 })
-export class ErrorComponent implements OnInit {
+export class ErrorComponent implements OnInit, OnDestroy {
 
-  constructor() { }
+  constructor(private afService: AuthService) { }
+
+  sub: Subscription;
+  error: string;
+
+  errorClose = new Subject<boolean>();
 
   ngOnInit(): void {
+    this.sub = this.afService.errorShow.subscribe(errorMessage => {this.error = errorMessage});
+  }
+
+
+  
+  onCancel(){
+    this.errorClose.next(false);
+  }
+
+  ngOnDestroy(){
+    this.sub.unsubscribe();
   }
 
 }
