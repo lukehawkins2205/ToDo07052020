@@ -61,7 +61,14 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
 
   getCollectionToDoList(index: number){
   this.toDoService.collectionUid = this.toDoListCollectionArray[index].collectionUid;
+  console.log('COLLECTION-SERVICE (COLLECTION UID)', this.toDoService.collectionUid)
   this.toDoService.collectionName = this.toDoListCollectionArray[index].collectionName;
+
+  //REFERENCE CAUSING THE BALL AKE HERE. 
+  //LOOK AT COURSE PERHAPS. 
+
+  this.toDoService.collectionToDo = this.toDoListCollectionArray[index];
+  this.toDoService.collectionToDoUidArray = this.toDoListCollectionArray[index].toDoListUid;
    this.router.navigate(['/todo']);
   }
 
@@ -70,6 +77,7 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   return this.fireStoreDB.collection<ToDoListCollection>('Collections', ref => ref.where('userUid', '==', `${this.afService.user.uid}`)).valueChanges()
   .pipe(tap(CollectionArrayReponse => {
     this.toDoListCollectionArray = CollectionArrayReponse;
+    //get array
   }))
   }
 
@@ -87,15 +95,15 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
 
   addCollection(CollectionName: string){
     
-    const toDoListsUid = []
+    const toDoListUid: string[] = ['test'];
     const collectionUid = this.sharedRandom.makeid();
     const selected = false;
-    const collectionObj = new ToDoListCollection(CollectionName, toDoListsUid, this.afService.user.uid, collectionUid, selected)
+    const collectionObj = new ToDoListCollection(CollectionName, toDoListUid, this.afService.user.uid, collectionUid, selected)
 
     this.fireStoreDB.collection('Collections').doc(collectionObj.collectionUid).set({
       collectionName: collectionObj.collectionName,
       userUid: collectionObj.userUid,
-      todoListsUid: collectionObj.toDoListUid,
+      todoListUid: collectionObj.toDoListUid,
       selected: false,
       collectionUid: collectionObj.collectionUid
       
@@ -140,6 +148,9 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
 
     this.fireStoreDB.collection('Collections').doc(`${this.toDoListCollectionArray[index].collectionUid}`).delete()
     .then(()=>{}).catch(error => console.log(error.message)); 
+
+   // this.fireStoreDB.collection('ToDo').get() //any doc where field = collection uid. 
+   
 
   }
 

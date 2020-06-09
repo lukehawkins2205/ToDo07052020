@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 
 
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-to-do-list',
@@ -43,7 +45,11 @@ export class ToDoListComponent implements OnInit, OnDestroy {
 
  
 
-  constructor(private toDoListService: ToDoListService, private router: Router) { }
+  constructor(private toDoListService: ToDoListService, private router: Router, private MatIcon: MatIconRegistry, private sanitizer: DomSanitizer) {
+    MatIcon.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
+    MatIcon.addSvgIcon('radiobutton', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
+    MatIcon.addSvgIcon('radiobutton', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
+   }
 
   ngOnInit() {
     this.$CreationWindow = this.toDoListService.closeOpenCreation.subscribe((x) => {

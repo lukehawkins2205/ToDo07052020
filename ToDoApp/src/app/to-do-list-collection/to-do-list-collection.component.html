@@ -1,15 +1,20 @@
 <app-dynamic-collection *ngIf="collectionCreate"></app-dynamic-collection>
 <app-dynamic-collection-edit *ngIf="collectionEdit"></app-dynamic-collection-edit>
 
+
+<div class="row">
+    <div class="col">
+        <h2>Lists</h2>
+    </div>
+</div>
+
+
 <div>
     <mat-card>
 
         <div class="row">
             <div class="col">
-             <h2>To Do Lists</h2>
-            </div>
-            <div class="col">
-                <button (click)="onAddCollection()" mat-raised-button color="primary">Create</button>
+                <mat-icon (click)="onAddCollection()" svgIcon="add" aria-hidden="false" aria-label="More"></mat-icon>
             </div>
             <div class="col">
                 <button (click)="onDeleteCollections()" mat-raised-button color="warn">Delete Batch</button>
@@ -35,8 +40,8 @@
     <mat-card>
     
         <div class="row">
-            <div class="col" *ngIf="deleteMode">
-                <mat-checkbox (click)='onCollectionSelected(i)'></mat-checkbox></div>
+            <div class="col">
+                <mat-icon svgIcon="listIcon" aria-hidden="false" aria-label="listIcon"></mat-icon></div>
             <div class="col"> 
                 <mat-panel-title>
                    List
@@ -47,7 +52,7 @@
                 <button mat-button (click)="onCollectionOpen(i)">OPEN</button>
             </div>
             <div class="col">
-                <button mat-button [matMenuTriggerFor]="menu">MORE</button>
+                <button mat-button [matMenuTriggerFor]="menu"><mat-icon svgIcon="more" aria-hidden="false" aria-label="More"></mat-icon></button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="onEditCollectioname(i)">Edit</button>
                   <button mat-menu-item (click)="onDeleteCollection(i)">Delete</button>

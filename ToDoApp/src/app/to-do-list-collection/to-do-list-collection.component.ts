@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-to-do-list-collection',
@@ -37,7 +39,11 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
   isFetching = true;
   deleteMode = false;
 
-  constructor(private ToDoListCollectionService: ToDoListCollectionService, private router: Router) { }
+  constructor(private ToDoListCollectionService: ToDoListCollectionService, private router: Router, private MatIcon: MatIconRegistry, private sanitizer: DomSanitizer) {
+    MatIcon.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
+    MatIcon.addSvgIcon('listIcon', sanitizer.bypassSecurityTrustResourceUrl('/assets/list-flat.svg'));
+    MatIcon.addSvgIcon('add', sanitizer.bypassSecurityTrustResourceUrl('/assets/add_circle-black-18dp.svg'));
+   }
 
   ngOnInit() {
    this.$CreationWindow = this.ToDoListCollectionService.closeOpenCreation.subscribe((x) => {this.collectionCreate = x});

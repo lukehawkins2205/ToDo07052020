@@ -1,13 +1,14 @@
 import { Injectable, OnInit } from '@angular/core';
 import { ToDo } from './to-do-list-item.model'
 import { HttpClient } from '@angular/common/http';
-import { Subject, Subscription, of } from 'rxjs';
+import { Subject, Subscription, of, Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { tap, map } from 'rxjs/operators';
 import { SharedComponent } from '../shared/shared.component';
 import { firestore } from 'firebase';
 import * as firebase from 'firebase';
+import { ToDoListCollection } from '../to-do-list-collection/to-do-list-collection.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,8 @@ export class ToDoListService {
 
   collectionUid: string;
   collectionName: string;
+  collectionToDo: ToDoListCollection
+  collectionToDoUidArray: string[] = []
 
 
   constructor(private fireStoreDB: AngularFirestore, private afAuth: AngularFireAuth, private sharedRandom: SharedComponent) {
@@ -74,17 +77,15 @@ getToDo(){
        }))
      }
 
-
-
   addToDo(toDo: string, dueDate: Date){
 
-    const toDoUid = this.fireStoreDB.createId();
-    const toDoCollectionUid = this.collectionUid;
-    const toDoName = toDo;
-    const toDoCompleted = false;
-    const toDoCompleteBy = dueDate;
-    const toDoCreated =  new Date();
-    const toDoOverdue = false;
+    let toDoUid = this.sharedRandom.makeid();
+    let toDoCollectionUid = this.collectionUid;
+    let toDoName = toDo;
+    let toDoCompleted = false;
+    let toDoCompleteBy = dueDate;
+    let toDoCreated =  new Date();
+    let toDoOverdue = false;
 
     const toDoObj = new ToDo(toDoUid, toDoCollectionUid, toDoName, toDoCompleted, toDoCompleteBy, toDoCreated, toDoOverdue);
 
@@ -100,7 +101,13 @@ getToDo(){
     }).then(() => {}).catch(x => {console.log('error', x.message)})
 
 
+    this.collectionToDo.toDoListUid.push(toDoUid);
+
+   this.fireStoreDB.collection('Collections').doc(`${this.collectionUid}`).update({
+      todoListsUid: this.collectionToDo.toDoListUid
+    }).then(()=>{}).catch(error => console.log(error.message)); 
   }
+
 
 
   Completed(index){
@@ -159,18 +166,45 @@ getToDo(){
   }
 
 
+
   deleteToDo(index){
+
+   /*   var uidIndex = this.collectionToDoUidArray.indexOf(this.toDoArray[index].toDoUid)
+
+      this.collectionToDoUidArray.splice(uidIndex, 1)
+
+      this.fireStoreDB.collection('Collections').doc(`${this.collectionUid}`).update({
+        todoListsUid: this.collectionToDoUidArray
+      }).then(()=>{}).catch(error => console.log(error.message)); */
+
     console.log('You Have Deleted: ',this.toDoArray[index].toDoName);
+
     this.fireStoreDB.collection('ToDo').doc(`${this.toDoArray[index].toDoUid}`).delete()
       .then(()=>{}).catch(error => console.log(error.message)); 
+
   }
 
+
+
+
   deleteCompletedToDo(index){
+
+  /*  var uidIndex = this.collectionToDoUidArray.indexOf(this.completedToDoArray[index].toDoUid)
+
+      this.collectionToDoUidArray.splice(uidIndex, 1)
+
+      this.fireStoreDB.collection('Collections').doc(`${this.collectionUid}`).update({
+        todoListsUid: this.collectionToDoUidArray
+      }).then(()=>{}).catch(error => console.log(error.message)); 
+*/
+
     console.log('You Have Deleted: ',this.completedToDoArray[index].toDoName);
     this.fireStoreDB.collection('ToDoCompleted').doc(`${this.completedToDoArray[index].toDoUid}`).delete()
       .then(()=>{}).catch(error => console.log(error.message)); 
 
   }
+
+
 
 
   toDoConversionHandler(toDoArray: ToDo[]){
