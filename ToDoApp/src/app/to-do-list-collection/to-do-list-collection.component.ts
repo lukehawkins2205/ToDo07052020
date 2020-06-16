@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 
 
 
-import { Subscription, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Subscription, Subject, pipe } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -22,12 +22,14 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
   
   
   $getCollection: Subscription;
-  collectionsDelete: boolean = false; //this needs activating.
+  $getRelatedToDos: Subscription;
+  $CompletedRelatedToDos: Subscription;
+  collectionsDelete: boolean = false; 
   selectedCollectionArray: ToDoListCollection[] = []
   selectedArray: string[] = []
   collectionUidTest: string;
 
-  //$editCollectionName = new Subject<boolean>();
+  
 
   collectionEdit: boolean = false;
   collectionCreate: boolean = false;
@@ -39,8 +41,10 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
   isFetching = true;
   deleteMode = false;
 
+  collectionID: number;
+
   constructor(private ToDoListCollectionService: ToDoListCollectionService, private router: Router, private MatIcon: MatIconRegistry, private sanitizer: DomSanitizer) {
-    MatIcon.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
+    //MatIcon.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
     MatIcon.addSvgIcon('listIcon', sanitizer.bypassSecurityTrustResourceUrl('/assets/list-flat.svg'));
     MatIcon.addSvgIcon('add', sanitizer.bypassSecurityTrustResourceUrl('/assets/add_circle-black-18dp.svg'));
    }
@@ -53,7 +57,7 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
    .subscribe(responseCollectionData => { 
      this.isFetching = false; 
      this.toDoListCollectionArray = responseCollectionData;
-      console.log('FireStore collections recieved', this.toDoListCollectionArray)})
+    })
   };
 
   onEditCollectioname(i){
@@ -66,17 +70,27 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
     this.collectionCreate = !this.collectionCreate;
   }
 
-  onDeleteCollection(index){
+  
+  onDeleteCollection(index:number){
     this.deleteMode = true;
-    this.ToDoListCollectionService.deleteCollection(index);
+    this.ToDoListCollectionService.collectionIndex = index 
+
+    this.$getRelatedToDos = this.ToDoListCollectionService.getRelatedToDo().subscribe(() => {
+      this.ToDoListCollectionService.deleteCollection(index);
+  })
+    this.$CompletedRelatedToDos = this.ToDoListCollectionService.getCompletedRelatedToDo().subscribe(() => {
+      this.ToDoListCollectionService.deleteCollection(index); 
+  })
   }
 
   onCollectionOpen(index){
+
     this.ToDoListCollectionService.getCollectionToDoList(index);
   }
 
 
   onCollectionSelected(index: number){
+    index = this.ToDoListCollectionService.collectionIndex;
     this.ToDoListCollectionService.collectionSelected(index);
   }
 
@@ -96,6 +110,12 @@ export class ToDoListCollectionComponent implements OnInit, OnDestroy {
     this.$CreationWindow.unsubscribe();
     this.$EditWindow.unsubscribe();
     this.$getCollection.unsubscribe();
+
+    if(this.deleteMode === true){
+      this.$getRelatedToDos.unsubscribe();
+      this.$CompletedRelatedToDos.unsubscribe();
+      this.deleteMode = false; 
+    }
   }
 
   

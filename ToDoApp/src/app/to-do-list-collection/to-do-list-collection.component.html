@@ -16,9 +16,6 @@
             <div class="col">
                 <mat-icon (click)="onAddCollection()" svgIcon="add" aria-hidden="false" aria-label="More"></mat-icon>
             </div>
-            <div class="col">
-                <button (click)="onDeleteCollections()" mat-raised-button color="warn">Delete Batch</button>
-            </div>
           </div>
 
 
@@ -52,7 +49,7 @@
                 <button mat-button (click)="onCollectionOpen(i)">OPEN</button>
             </div>
             <div class="col">
-                <button mat-button [matMenuTriggerFor]="menu"><mat-icon svgIcon="more" aria-hidden="false" aria-label="More"></mat-icon></button>
+                <button mat-button [matMenuTriggerFor]="menu"><mat-icon aria-hidden="false" aria-label="More">more_vert</mat-icon></button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="onEditCollectioname(i)">Edit</button>
                   <button mat-menu-item (click)="onDeleteCollection(i)">Delete</button>

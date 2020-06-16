@@ -1,14 +1,15 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, Observable, of } from 'rxjs';
 import { ToDoListCollection } from './to-do-list-collection.model';
 import { firestore } from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { SharedComponent } from '../shared/shared.component';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { ToDoListService } from '../to-do-list/to-do-list.service';
 import { AuthService } from '../auth/auth.service';
+import { ToDo } from '../to-do-list/to-do-list-item.model';
 
 
 
@@ -29,6 +30,13 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   
   toDoListCollectionArray: ToDoListCollection[] = []; 
   selectedCollectionArray: ToDoListCollection[] = [];
+
+  relatedTodos = [];
+
+  readyToDeleteToDo = 0;
+
+  collectionIndex: number;
+  
 
 
 
@@ -61,14 +69,8 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
 
   getCollectionToDoList(index: number){
   this.toDoService.collectionUid = this.toDoListCollectionArray[index].collectionUid;
-  console.log('COLLECTION-SERVICE (COLLECTION UID)', this.toDoService.collectionUid)
   this.toDoService.collectionName = this.toDoListCollectionArray[index].collectionName;
-
-  //REFERENCE CAUSING THE BALL AKE HERE. 
-  //LOOK AT COURSE PERHAPS. 
-
   this.toDoService.collectionToDo = this.toDoListCollectionArray[index];
-  this.toDoService.collectionToDoUidArray = this.toDoListCollectionArray[index].toDoListUid;
    this.router.navigate(['/todo']);
   }
 
@@ -77,7 +79,6 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   return this.fireStoreDB.collection<ToDoListCollection>('Collections', ref => ref.where('userUid', '==', `${this.afService.user.uid}`)).valueChanges()
   .pipe(tap(CollectionArrayReponse => {
     this.toDoListCollectionArray = CollectionArrayReponse;
-    //get array
   }))
   }
 
@@ -120,40 +121,87 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
     this.fireStoreDB.collection('Collections').doc(`${this.toDoListCollectionArray[this.index].collectionUid}`).update({
       'collectionName': collectionName
     }).then(()=>{}).catch(error => console.log(error.message)); 
+
+
+    
   }
 
   deleteCollections(){
 
+  
     for(let index = 0; this.selectedCollectionArray.length; index++){
       this.fireStoreDB.collection('Collections').doc(`${this.selectedCollectionArray[index].collectionUid}`).delete()
       .then(()=>{}).catch(error => console.log(error.message)); 
     }
     this.selectedCollectionArray = [];
     console.log('selected container after delete function', this.selectedCollectionArray)
-
-
-
-
-
-
   }
+
+
+  
 
   deleteCollection(index){
 
-  //  var toDoArrayUid: string[] = this.toDoListCollectionArray[index].toDoListUid
+    if(this.readyToDeleteToDo === 2){
 
-   /* for(let index = 0; toDoArrayUid.length; index++)
-      this.fireStoreDB.collection('ToDo').doc(`${toDoArrayUid[index]}`).delete()
-    .then(()=>{}).catch(error => console.log(error.message)); */
+      this.relatedTodos.forEach(itemID => {
+        this.fireStoreDB.collection('ToDo').doc(`${itemID}`).delete()
+      .then(()=>{}).catch(error => console.log(error.message)); 
+      })
 
-    this.fireStoreDB.collection('Collections').doc(`${this.toDoListCollectionArray[index].collectionUid}`).delete()
-    .then(()=>{}).catch(error => console.log(error.message)); 
+      this.relatedTodos.forEach(itemID => {
+        this.fireStoreDB.collection('ToDoCompleted').doc(`${itemID}`).delete()
+      .then(()=>{}).catch(error => console.log(error.message)); 
+      })
+      
+      this.fireStoreDB.collection('Collections').doc(`${this.toDoListCollectionArray[index].collectionUid}`).delete()
+      .then(()=>{}).catch(error => console.log(error.message));
 
-   // this.fireStoreDB.collection('ToDo').get() //any doc where field = collection uid. 
-   
+      this.readyToDeleteToDo = 0;
+      this.collectionIndex = null;
+      this.relatedTodos = [];
+    }else{
+      return null;
+    }
 
   }
 
+
+  getRelatedToDo(){
+    if(this.collectionIndex === null || undefined){
+      return of(null);
+    }else{
+      return this.fireStoreDB.collection<ToDo>('ToDo', ref => ref.where('toDoCollectionUid', '==', `${this.toDoListCollectionArray[this.collectionIndex].collectionUid}`)).get()
+      .pipe(
+        map(snapshot => {
+            this.readyToDeleteToDo++
+            const docData = snapshot.docs;
+            for(var i in docData){
+              this.relatedTodos.push(docData[i].id);
+            }
+            return this.relatedTodos;
+        }))
+    }
+      
+  } 
+
+  getCompletedRelatedToDo(){
+
+    if(this.collectionIndex === null || undefined){
+      return of(null);
+    }else{
+      return this.fireStoreDB.collection<ToDo>('ToDoCompleted', ref => ref.where('toDoCollectionUid', '==', `${this.toDoListCollectionArray[this.collectionIndex].collectionUid}`)).get()
+    .pipe(
+      map(snapshot => {
+        this.readyToDeleteToDo++
+        const docData = snapshot.docs;
+        for(var i in docData){
+          this.relatedTodos.push(docData[i].id);
+        }
+        return this.relatedTodos;
+      }))
+    }
+} 
   
 
 

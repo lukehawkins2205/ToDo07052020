@@ -62,7 +62,6 @@ getToDo(){
      //this.dateAndOverDueConversion(res);
      this.toDoArray = toDoArrayRes;
      this.toDoConversionHandler(this.toDoArray)
-     console.log('TAP SERVICE ARRAY', this.toDoArray)
     }))
   }
 
@@ -73,9 +72,9 @@ getToDo(){
         //this.dateAndOverDueConversion(res);
         this.completedToDoArray = toDoArrayRes;
         this.toDoConversionHandler(this.completedToDoArray)
-        console.log('TAP SERVICE Completed ARRAY', this.completedToDoArray)
        }))
      }
+
 
   addToDo(toDo: string, dueDate: Date){
 
@@ -87,7 +86,7 @@ getToDo(){
     let toDoCreated =  new Date();
     let toDoOverdue = false;
 
-    const toDoObj = new ToDo(toDoUid, toDoCollectionUid, toDoName, toDoCompleted, toDoCompleteBy, toDoCreated, toDoOverdue);
+    let toDoObj = new ToDo(toDoUid, toDoCollectionUid, toDoName, toDoCompleted, toDoCompleteBy, toDoCreated, toDoOverdue);
 
     this.fireStoreDB.collection('ToDo').doc(`${toDoObj.toDoUid}`).set({
       toDoUid: toDoObj.toDoUid,
@@ -100,12 +99,6 @@ getToDo(){
       
     }).then(() => {}).catch(x => {console.log('error', x.message)})
 
-
-    this.collectionToDo.toDoListUid.push(toDoUid);
-
-   this.fireStoreDB.collection('Collections').doc(`${this.collectionUid}`).update({
-      todoListsUid: this.collectionToDo.toDoListUid
-    }).then(()=>{}).catch(error => console.log(error.message)); 
   }
 
 
@@ -123,10 +116,10 @@ getToDo(){
         toDoCompleteBy: this.toDoArray[index].toDoCompleteBy,
         toDoCreated: this.toDoArray[index].toDoCreated,
         toDoOverdue: this.toDoArray[index].toDoOverdue
-        }).then(() => {console.log('added to completed collection')}).catch(x => {console.log('error1', x.message)})
+        }).then(() => {}).catch(x => {console.log('error1', x.message)})
   
         this.fireStoreDB.collection('ToDo').doc(`${this.toDoArray[index].toDoUid}`).delete()
-        .then(()=>{console.log('deleted from main collection')}).catch(error => console.log('error2',error.message)); 
+        .then(()=>{}).catch(error => console.log('error2',error.message)); 
     }
   }
 
@@ -140,10 +133,10 @@ getToDo(){
         toDoCompleteBy: this.completedToDoArray[index].toDoCompleteBy,
         toDoCreated: this.completedToDoArray[index].toDoCreated,
         toDoOverdue: this.completedToDoArray[index].toDoOverdue
-        }).then(() => {console.log('added to main collection')}).catch(x => {console.log('error1', x.message)})
+        }).then(() => {}).catch(x => {console.log('error1', x.message)})
   
         this.fireStoreDB.collection('ToDoCompleted').doc(`${this.completedToDoArray[index].toDoUid}`).delete()
-        .then(()=>{console.log('deleted from completed collection')}).catch(error => console.log('error2',error.message)); 
+        .then(()=>{}).catch(error => console.log('error2',error.message)); 
   
   }
 
@@ -169,14 +162,6 @@ getToDo(){
 
   deleteToDo(index){
 
-   /*   var uidIndex = this.collectionToDoUidArray.indexOf(this.toDoArray[index].toDoUid)
-
-      this.collectionToDoUidArray.splice(uidIndex, 1)
-
-      this.fireStoreDB.collection('Collections').doc(`${this.collectionUid}`).update({
-        todoListsUid: this.collectionToDoUidArray
-      }).then(()=>{}).catch(error => console.log(error.message)); */
-
     console.log('You Have Deleted: ',this.toDoArray[index].toDoName);
 
     this.fireStoreDB.collection('ToDo').doc(`${this.toDoArray[index].toDoUid}`).delete()
@@ -188,15 +173,6 @@ getToDo(){
 
 
   deleteCompletedToDo(index){
-
-  /*  var uidIndex = this.collectionToDoUidArray.indexOf(this.completedToDoArray[index].toDoUid)
-
-      this.collectionToDoUidArray.splice(uidIndex, 1)
-
-      this.fireStoreDB.collection('Collections').doc(`${this.collectionUid}`).update({
-        todoListsUid: this.collectionToDoUidArray
-      }).then(()=>{}).catch(error => console.log(error.message)); 
-*/
 
     console.log('You Have Deleted: ',this.completedToDoArray[index].toDoName);
     this.fireStoreDB.collection('ToDoCompleted').doc(`${this.completedToDoArray[index].toDoUid}`).delete()
