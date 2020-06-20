@@ -14,6 +14,7 @@ import { ToDo } from '../to-do-list/to-do-list-item.model';
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,6 +28,7 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
   closeOpenEdit = new Subject<boolean>();
 
   getToDoList = new Subject<string>();  
+  ChangeSubHeading = new Subject<string>(); 
   
   toDoListCollectionArray: ToDoListCollection[] = []; 
   selectedCollectionArray: ToDoListCollection[] = [];
@@ -69,8 +71,9 @@ export class ToDoListCollectionService implements OnInit, OnDestroy  {
 
   getCollectionToDoList(index: number){
   this.toDoService.collectionUid = this.toDoListCollectionArray[index].collectionUid;
-  this.toDoService.collectionName = this.toDoListCollectionArray[index].collectionName;
   this.toDoService.collectionToDo = this.toDoListCollectionArray[index];
+  this.ChangeSubHeading.next(this.toDoListCollectionArray[index].collectionName);
+
    this.router.navigate(['/todo']);
   }
 

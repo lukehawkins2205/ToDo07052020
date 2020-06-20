@@ -20,6 +20,8 @@ export class AuthService {
   user: User;
   showButtonSubject = new Subject;
   signOutButtonSubject = new Subject<boolean>();
+  errorMessage: string;
+  errorFire = new Subject<string>();
 
 
 
@@ -31,6 +33,7 @@ export class AuthService {
       console.log('User logged in: ', this.user.email);
       this.insertUserDatatoDB(this.user);
       this.userSubject.next(firebaseUser);
+      this.signOutButtonSubject.next(true);
       this.router.navigate(['/collections']);
 
     }else{
@@ -42,31 +45,22 @@ export class AuthService {
   })
 
 
-  
-  errorShow = new Subject<string>();
-  errorShow1 = new Subject<boolean>();
-
-
-  errorMes: string;
   signUp(email: string, password: string){
   const signUpPromise = this.afAuth.createUserWithEmailAndPassword(email, password);
-  signUpPromise.catch(error => console.log(error)); 
-  //console.log(this.errorMes); this.errorShow1.next(true); this.errorShow.next(this.errorMes);
-  this.signOutButtonSubject.next(true);
+  signUpPromise.catch(error => {this.errorFire.next(error); console.log(error)}); 
+  
   }
 
   signIn(email: string, password: string){
     const signInPromise = this.afAuth.signInWithEmailAndPassword(email, password);
-    signInPromise.catch(error => {console.log(error.message);});
-    this.signOutButtonSubject.next(true);
+    signInPromise.catch(error => {this.errorFire.next(error); console.log(error.message);});
+    
   }
 
 
   LogOut(){
     this.afAuth.signOut(); 
   }
-
-  //ngOnDrestroy(){showbutton.unsubscribe()}
 
 
   insertUserDatatoDB(user: User){
@@ -77,24 +71,6 @@ export class AuthService {
   }
   
 
-  /*handleAuth(email: string, uid: string){
-    const userData = new User(email, uid);
-    this.afAuth.onAuthStateChanged(firebaseUser => {console.log(firebaseUser)})
-    //this.user.next(user);
-    this.insertUserDatatoDB(userData).then(() => {
-      this.router.navigate(['/todo'])}).catch(error => {console.log(error.error.error.message)})
-    //localStorage.setItem('userData', JSON.stringify(userData));
-  }*/
-
-  
-
-
-  /*insertUserDatatoDB(userResponseData: firebase.auth.UserCredential){
-    console.log(userResponseData.user);
-    return this.FireStoreDB.doc(`Users/${userResponseData.user.uid}`).set({
-      email: userResponseData.user.email
-    })
-  }*/
 
 }
 
@@ -134,82 +110,3 @@ export class AuthService {
 
 
 
-
-
-
-
-
-
-
-
-
-
-/*import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { User } from './user.model';
-import { Router } from '@angular/router';
-import { throwError, Subject } from 'rxjs';
-import {tap} from 'rxjs/operators'
-
-export interface AuthResponseData {
-  kind: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  registered?: boolean;
-}
-
-
-
-@Injectable({
-  providedIn: 'root'
-})
-
-export class AuthService {
-
-  user = new Subject<User>();
-
-
-  constructor(private http: HttpClient, private router: Router) { }
-  
-
-
-  SignUp(Email: string, Password: string){
-
-   this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDgRBnpvhYR2G4Umjt9syEj4Zy8gOlXNf8',
-     {email: Email, password: Password, returnSecureToken: true}).pipe(
-      tap(responseData => {this.handleAuth(
-          responseData.email, responseData.localId, responseData.idToken, responseData.expiresIn)},
-       error => this.handleError(error)))
-      .subscribe(
-     () => {this.router.navigate(['/todo'])},
-       error => this.handleError(error))
-    }
-
-
-  SignIn(Email: string, Password: string){
-
-    this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDgRBnpvhYR2G4Umjt9syEj4Zy8gOlXNf8',
-     {email: Email, password: Password, returnSecureToken: true}).pipe(
-      tap(responseData => {this.handleAuth(
-          responseData.email, responseData.localId, responseData.idToken, responseData.expiresIn)},
-       error => this.handleError(error)))
-      .subscribe(
-     (responseData) => {console.log('user should nav to /todo', responseData.email); this.router.navigate(['/todo'])},
-       error => this.handleError(error))
-  }
-
-  handleAuth(email: string, localId: string, idToken: string, expiresIn: any){
-    const user = new User(email, localId, idToken, expiresIn);
-    console.log('user has logged in!', user)
-    this.user.next(user);
-    localStorage.setItem('userData', JSON.stringify(user));
-  }
-
-  handleError(errorRes: HttpErrorResponse){
-    console.log(errorRes.error.error.message);
-  }
-
-}*/

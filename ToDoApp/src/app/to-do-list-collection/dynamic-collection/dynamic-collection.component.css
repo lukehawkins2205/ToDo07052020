@@ -21,4 +21,31 @@
   
   .alert-box-actions {
     text-align: right;
+    margin-top: 2%;
+  }
+
+
+  .flexContainer{
+    position: fixed;
+    z-index: 100;
+  }
+
+  .centerContainer{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  }
+
+  .centerContainer1{
+    display: flex;
+    margin-top: 10%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  }
+
+
+  .buttonCancel{
+    margin-top: 7%
   }

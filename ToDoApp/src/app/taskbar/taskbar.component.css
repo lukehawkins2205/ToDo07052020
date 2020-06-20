@@ -4,3 +4,26 @@
     right: 1%;
     color: white;
 }
+
+
+
+
+.test{
+    color: white;
+}
+
+.sub-banner{
+    background-color: #3f51b5c9;
+}
+
+.sub{
+    color: white;
+    font-weight: lighter;
+    font-size: 300%;
+}
+
+.subBox{
+    padding-left: 3%;
+    padding-bottom: 1%;
+    padding-top: 2%;
+}

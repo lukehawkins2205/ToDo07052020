@@ -13,3 +13,64 @@
     color: rgb(0, 0, 0);
     font-weight: 100;
 }
+
+.addicon{
+  margin-right: 2%;
+}
+
+.addNewList{
+  padding-top: 1%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.listImage{
+  padding-top: 1%;
+}
+
+.listname{
+  padding-top: 1%;
+}
+
+.listMore{
+  padding-top: 1%;
+}
+
+.title{
+  font-size: 400%;
+}
+
+.top-bar-container{
+  padding-top: 3%;
+}
+
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+             
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drop-dragging .cdk-drag {
+  transition: transform 500ms cubic-bezier(0, 0, 0.2, 1);
+}
+.example-list.cdk-drag-animating {
+  transition: transform 550ms cubic-bezier(0, 0, 0.2, 1);
+}
+.cdk-drag-placeholder {
+  background: rgba(0, 0, 0, .2);
+}
+
+
+
+.solidred {border-style: solid; color: red;}
+.solidblue {border-style: solid; color: blue;}
+.solidyellow {border-style: solid; color: yellow;}
+.solidgreen {border-style: solid; color: green;}
+.solidblack {border-style: solid; color: black;}

@@ -3,7 +3,7 @@
 
 <mat-card class="center">
     <br>
-    <i class="fas fa-trash-restore-alt"></i>
+    
     
 <div class="d-flex justify-content-center">
 
@@ -51,10 +51,9 @@
       </mat-tab-group>
 
 </div>
-
   <br>
-
-
- 
-
 </mat-card>
+<br>
+<div *ngIf="errorMessage" class="d-flex justify-content-center errorM alert alert-danger"><p>{{errorMessage}}</p></div>
+<br>
+<br>

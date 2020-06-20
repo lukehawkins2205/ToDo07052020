@@ -1,10 +1,19 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-      <span>To Do App</span>
+  <div class="sub-banner">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row class="mat-elevation-z2">
+          <span>To Do App</span>
+          <button (click)="onSignOut()" mat-button class="topright" *ngIf="show">Sign Out</button>
+        </mat-toolbar-row>
+      </mat-toolbar>
+    <div class="subBox" *ngIf="show">
+    <h1 class="sub">{{subHeading}}</h1>
+    </div>
+  </div>
 
-      
 
-      <button (click)="onSignOut()" mat-button class="topright" *ngIf="show">Sign Out</button>
-    </mat-toolbar-row>
-  </mat-toolbar>
+    
+
+
+ 
+
 

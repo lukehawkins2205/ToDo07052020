@@ -7,6 +7,7 @@ import { AuthService } from '../auth/auth.service';
 import { unescapeIdentifier } from '@angular/compiler';
 import { Subscription } from 'rxjs';
 
+
 @Component({
   selector: 'app-taskbar',
   templateUrl: './taskbar.component.html',
@@ -15,16 +16,20 @@ import { Subscription } from 'rxjs';
 export class TaskbarComponent implements OnInit, OnDestroy {
 
   subscription: Subscription
+  $updateSubHeading: Subscription;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private afService: AuthService) { 
+  constructor(private afAuth: AngularFireAuth, private router: Router, private afService: AuthService, private collection: ToDoListCollectionService, ) { 
     this.subscription = this.afService.signOutButtonSubject.subscribe(x => this.show = x)
     
   }
 
-  show: boolean = true; 
+  show: boolean = false; 
+
+  subHeading = 'Lists'
 
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.$updateSubHeading = this.collection.ChangeSubHeading.subscribe(heading => {this.subHeading = heading});
   }
 
   onSignOut(){
@@ -38,6 +43,8 @@ export class TaskbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.subscription.unsubscribe();
+    this.$updateSubHeading.unsubscribe();
+    this.$updateSubHeading.unsubscribe();
   }
 
  

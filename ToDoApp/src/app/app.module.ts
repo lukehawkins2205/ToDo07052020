@@ -113,7 +113,7 @@ import { DynamicTodoEditComponent } from "./to-do-list/dynamic-todo/dynamic-todo
    
     
   ],
-  providers: [SharedComponent, ErrorComponent ],
+  providers: [SharedComponent, ErrorComponent, ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

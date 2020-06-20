@@ -1,68 +1,58 @@
 <app-dynamic-collection *ngIf="collectionCreate"></app-dynamic-collection>
 <app-dynamic-collection-edit *ngIf="collectionEdit"></app-dynamic-collection-edit>
 
-
-<div class="row">
-    <div class="col">
-        <h2>Lists</h2>
-    </div>
-</div>
-
-
-<div>
-    <mat-card>
-
-        <div class="row">
-            <div class="col">
-                <mat-icon (click)="onAddCollection()" svgIcon="add" aria-hidden="false" aria-label="More"></mat-icon>
+            <div class="row d-flex justify-content-end">
+                <div>
+                    <button mat-mini-fab color="primary" (click)="onAddCollection()"><i class="fas fa-plus addicon"></i></button>
+                </div>
+                <div class="addNewList">
+                    <h4>Add new list</h4>
+                </div>
             </div>
-          </div>
+   
 
-
-
-    </mat-card>
-</div>
-<br>
-<br>
 <br>
 <div class="d-flex justify-content-center"  *ngIf="isFetching"><mat-spinner></mat-spinner></div>
 
-
-
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-
-
     <div *ngFor ="let ToDoCollection of toDoListCollectionArray; let i = index" cdkDrag>
         <br>
     <mat-card>
-    
         <div class="row">
-            <div class="col">
-                <mat-icon svgIcon="listIcon" aria-hidden="false" aria-label="listIcon"></mat-icon></div>
-            <div class="col"> 
-                <mat-panel-title>
-                   List
-                  </mat-panel-title>
-                <h3 class="text1">{{ToDoCollection.collectionName}}</h3>
-            </div>
-            <div class="col">
-                <button mat-button (click)="onCollectionOpen(i)">OPEN</button>
-            </div>
-            <div class="col">
-                <button mat-button [matMenuTriggerFor]="menu"><mat-icon aria-hidden="false" aria-label="More">more_vert</mat-icon></button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="onEditCollectioname(i)">Edit</button>
-                  <button mat-menu-item (click)="onDeleteCollection(i)">Delete</button>
-                </mat-menu>
-            </div>
-          </div>
-    
-    </mat-card>
-    </div>
+            <div class="col-11" (click)="onCollectionOpen(i)">
+                <div class="row">
+                    <div class="col-1 listImage">
+                        <i class="fas fa-list fa-2x"></i>
+                    </div>
+                    <div class="col-11 listname">
+                        <h2 class="text1">{{ToDoCollection.collectionName}}</h2>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-1 listMore">
+                   
+                        <button mat-button [matMenuTriggerFor]="menu"><mat-icon aria-hidden="false" aria-label="More">more_vert</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="onEditCollectioname(i)">Edit</button>
+                      <button mat-menu-item (click)="onDeleteCollection(i)">Delete</button>
+                    </mat-menu>
+                    
+                </div>
 
 
 
-</div>
+            </div>
+     </mat-card>
+ </div>
+ </div>
+
+
+
+
+
+           
+      
+
 
 
 

@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToDoListService } from './to-do-list.service';
 import { ToDo } from './to-do-list-item.model'
-import { Subscription, of } from 'rxjs';
+import { Subscription, of, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
 
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ToDoListCollectionService } from '../to-do-list-collection/to-do-list-collection.service';
 
 @Component({
   selector: 'app-to-do-list',
@@ -29,7 +30,6 @@ export class ToDoListComponent implements OnInit, OnDestroy {
   
   collectionName: string = this.toDoListService.collectionName;
 
-
   $serviceToDo: Subscription
 
   complete: boolean = false; 
@@ -42,10 +42,12 @@ export class ToDoListComponent implements OnInit, OnDestroy {
 
   sortOption: string = '';
 
+  changeSubHeading: Subject<string>;
+
 
  
 
-  constructor(private toDoListService: ToDoListService, private router: Router, private MatIcon: MatIconRegistry, private sanitizer: DomSanitizer) {
+  constructor(private toDoListService: ToDoListService, private router: Router, private MatIcon: MatIconRegistry, private sanitizer: DomSanitizer, private Collection: ToDoListCollectionService) {
     MatIcon.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
     MatIcon.addSvgIcon('radiobutton', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
     MatIcon.addSvgIcon('radiobutton', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
@@ -79,6 +81,7 @@ export class ToDoListComponent implements OnInit, OnDestroy {
   }
 
   onBackPage(){
+    this.Collection.ChangeSubHeading.next('Lists')
     this.router.navigate(['/collections'])
   }
 

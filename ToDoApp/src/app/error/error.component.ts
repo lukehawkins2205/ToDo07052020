@@ -17,7 +17,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
   errorClose = new Subject<boolean>();
 
   ngOnInit(): void {
-    this.sub = this.afService.errorShow.subscribe(errorMessage => {this.error = errorMessage});
+    
   }
 
 

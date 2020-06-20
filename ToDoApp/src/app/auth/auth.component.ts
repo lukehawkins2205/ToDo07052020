@@ -24,17 +24,17 @@ import { ErrorComponent } from '../error/error.component';
 export class AuthComponent implements OnInit, OnDestroy {
 
   errorShow: boolean = false; 
-
-  $error: Subscription;
-  $error1: Subscription;
+  errorMessage: string;
+  $error: Subscription
   
 
 
   constructor(private authService: AuthService, private errorComp: ErrorComponent) {}
   ngOnInit(): void {
 
-    this.$error = this.errorComp.errorClose.subscribe(close => {  this.errorShow = close; console.log('errorclose', this.errorShow)});
-    this.$error1 = this.authService.errorShow1.subscribe(open => {this.errorShow = open});
+   
+    this.$error = this.authService.errorFire.subscribe(error => {this.errorMessage = error});
+    
 
     this.Form = new FormGroup({
       'email': new FormControl(null, Validators.required),
@@ -61,8 +61,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy(){
-      this.$error.unsubscribe();
-      this.$error1.unsubscribe();
+     this.$error.unsubscribe()
     }
         
 
@@ -110,54 +109,3 @@ export class AuthComponent implements OnInit, OnDestroy {
 
 
 
-
-
-
-
-
-  /*
-
-  import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AuthService } from './auth.service';
-
-
-  Form: FormGroup;
-  btnSignUp: boolean;
-  errorAlert: string = null;
-
-
-  constructor(private AuthService: AuthService) { }
-
-
-  ngOnInit(): void {
-    this.Form = new FormGroup({
-      'email': new FormControl(null, Validators.required),
-      'password': new FormControl(null, Validators.required)
-    });
-  }
-
-
-  onLoginType(loginType: string){
-    if(loginType === 'signup')
-    {
-      this.btnSignUp = true;
-    }else{
-      this.btnSignUp = false;
-    }
-  }
-
-
-  onSubmit(){
-    if(this.btnSignUp){
-      this.AuthService.SignUp(this.Form.value.email, this.Form.value.password);
-    }else{
-      this.AuthService.SignIn(this.Form.value.email, this.Form.value.password);
-    }
-   // this.Form.reset();
-  }
-
-  showErrorAlert(){
-    this.errorAlert = 'You have a problambo my friend';
-  }
-
-}*/

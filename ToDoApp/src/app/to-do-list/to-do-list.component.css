@@ -28,3 +28,185 @@
   .mat-form-field + .mat-form-field {
     margin-left: 8px;
   }
+
+
+  
+.addicon{
+    margin-right: 2%;
+  }
+  
+  .addNewList{
+    padding-top: 3%;
+    margin-left: 2%;
+    margin-right: 4%;
+  }
+
+  .backButton{
+      margin-left: 3%;
+      margin-top: 3%;
+  }
+
+  .sortList{
+    padding-top: 1%;
+    margin-left: 2%;
+    margin-right: 2.5%; 
+  }
+
+  .addiconspace{
+      padding-top: 1.5%;
+  }
+
+  .sortRow{
+    margin-top: 3%;
+  }
+
+  .sortbutton i{
+    vertical-align: middle;
+  }
+
+  .sortIcon{
+    padding-right: 10%;
+    padding-bottom: 8%;
+  }
+
+
+
+
+.card-container{
+    display: flex;
+    flex-basis: 94%;
+}
+
+.card-container1{
+    display: flex;
+   flex-basis: 95%;
+}
+
+.card-container2{
+    display: flex;
+   
+}
+
+.tickBox{
+    padding-top: 1%;
+    padding-right: 2%;
+    flex-basis: 5%;
+}
+
+.name-box{
+    padding-top: 1%;
+    margin-right: 2%;
+    flex-basis: 92%;
+    max-width: 35%;
+}
+
+.overdue-box{
+    padding-top: 0.5%;
+    margin-right: 5%;
+}
+
+.bell{
+    padding-top: 1%;
+    margin-right: 1%;
+    color: rgb(238, 3, 3);
+}
+
+.overdueText{
+    padding-top: 1.4%;
+}
+
+.dateText{
+    padding-top: 1.2%;
+    float: right;
+}
+
+
+.bin-box{
+    margin-top: 34%;
+   
+}
+
+.newBin{
+    padding-top: 40%;
+}
+
+.newButtonBack{
+    padding-left: 5%;
+    padding-right: 7%;
+}
+
+.newOverText{
+    margin-top: 3%;
+}
+
+.newOverdueIcon{
+    margin-right: 4%;
+    padding-top: 4.4%;
+}
+
+.newDate{
+    flex-basis: 20%;
+   
+}
+
+
+.newName{
+    flex-basis: 60%;
+}
+
+.newNameOverDue{
+    flex-basis: 80%;
+}
+
+.newOverDue{
+    flex-basis: 20%;
+}
+
+.newDays{
+    flex-basis: 20%;
+}
+
+.newDaysText{
+    margin-top: 2%;
+}
+
+.newTick{
+    margin-right: 2%;
+}
+
+.buttonarrow{
+    padding-right: 1%;
+}
+
+
+
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+               
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drop-dragging .cdk-drag {
+    transition: transform 500ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  .example-list.cdk-drag-animating {
+    transition: transform 550ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  .cdk-drag-placeholder {
+    background: rgba(0, 0, 0, .2);
+  }
+
+ 
+  .solidred {border-style: solid; color: red;}
+.solidblue {border-style: solid; color: blue;}
+.solidyellow {border-style: solid; color: yellow;}
+.solidgreen {border-style: solid; color: green;}
+.solidblack {border-style: solid; color: black;}
+.solidpurple {border-style: solid; color: purple;}
