@@ -45,7 +45,8 @@ export class ToDoListComponent implements OnInit, OnDestroy {
   changeSubHeading: Subject<string>;
 
 
- 
+ showCompletedList: boolean = false;
+ showSortList: boolean = false;
 
   constructor(private toDoListService: ToDoListService, private router: Router, private MatIcon: MatIconRegistry, private sanitizer: DomSanitizer, private Collection: ToDoListCollectionService) {
     MatIcon.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('/assets/more_vert-black-18dp.svg'));
@@ -61,11 +62,26 @@ export class ToDoListComponent implements OnInit, OnDestroy {
      this.toDoEdit = x});
 
    this.$toDoSort = this.toDoListService.todoArrayNext.subscribe(sortedtoDoArray => {
+     if(sortedtoDoArray.length === 0){
+      this.showSortList = false;
+     }
+     else{
+       this.showSortList = true;
+     }
      this.isFetching = false; 
      this.toDoArray = sortedtoDoArray
     });
 
-    this.$toDoCompleted1 = this.toDoListService.getToDoCompleted().subscribe((x) => {this.completedToDoArray = x});
+    this.$toDoCompleted1 = this.toDoListService.getToDoCompleted().subscribe((x) => {
+      
+      if (x.length === 0){
+        this.showCompletedList = false;
+      }
+      else{
+        this.showCompletedList = true;
+      }
+      
+      this.completedToDoArray = x});
 
   
     this.$serviceToDo = this.toDoListService.getToDo().subscribe(()=>{

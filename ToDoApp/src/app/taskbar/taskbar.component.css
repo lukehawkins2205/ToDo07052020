@@ -27,3 +27,13 @@
     padding-bottom: 1%;
     padding-top: 2%;
 }
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    .subBox{
+        padding-left: 3%;
+        padding-bottom: 1%;
+        padding-top: 3%;
+    }
+    }

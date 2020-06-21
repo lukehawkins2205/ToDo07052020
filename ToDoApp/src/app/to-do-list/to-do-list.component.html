@@ -6,9 +6,9 @@
     <div class="col">
         <div class="row">
             <div class="d-flex justify-content-end backButton">
-                <button (click)="onBackPage()" mat-raised-button color="primary" class="  row d-flex justify-content-end">
+                <button (click)="onBackPage()" mat-button color="primary" class="  row d-flex justify-content-end mat-elevation-z2">
                     
-                    Back to Lists
+                    &lt; Lists
                 </button>
             </div>
         </div>
@@ -24,7 +24,7 @@
                 <h4>Add Todo</h4>
             </div>
         </div>
-        <div class="row d-flex justify-content-end sortRow">
+        <div class="row d-flex justify-content-end sortRow" *ngIf="showSortList">
             
                 <div class="sortList ">
                 <button mat-button [matMenuTriggerFor]="menu" class="sortbutton mat-elevation-z2">
@@ -55,15 +55,12 @@
 
 
 
-
-
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
 
     <div *ngFor ="let ToDo of toDoArray; let i = index" cdkDrag>
         <br>
 
         
-
 
         <mat-card  >
 
@@ -76,20 +73,25 @@
         
         
         
-                <div  class=" card-container " (click)="onEditToDo(i)" >
+                <div  class=" card-container1 " (click)="onEditToDo(i)">
                     <div class="newName">
-                        <h3>{{ToDo.toDoName}}</h3>
+                        <h3 class="todoText">{{ToDo.toDoName}}</h3>
                     </div>
-                    <div class="newOverDue card-container" *ngIf="ToDo.toDoOverdue && !ToDo.toDoCompleted"> 
-                        <i class="fas fa-bell fa-1x newOverdueIcon"></i>
-                        <p class="newOverText">OVERDUE</p>
+                    
+
+                    <div class=" card-container ">
+                        <div class="newDate">
+                            <h3 class="todotextmobile">{{ToDo.toDoCompleteBy | date: 'shortDate' }}</h3>
+                        </div>
+                        <div class="newDays" *ngIf="!ToDo.toDoOverdue">
+                            <h3 class="todotextmobile">Days Left: {{ToDo.daysRemaining}}</h3>
+                        </div>
+                        <div class="newOverDue card-container"  *ngIf="ToDo.toDoOverdue && !ToDo.toDoCompleted"> 
+                            <i class="fas fa-bell fa-1x newOverdueIcon"></i>
+                            <p class="newOverText todotextmobile">OVERDUE</p>
+                        </div>
                     </div>
-                    <div *ngIf="!ToDo.toDoOverdue" class="newDays">
-                        <h3 >Days Left: {{ToDo.daysRemaining}}</h3>
-                    </div>
-                    <div class="newDate">
-                        <h3>{{ToDo.toDoCompleteBy | date: 'shortDate' }}</h3>
-                    </div>
+    
                 </div>
         
         
@@ -116,7 +118,7 @@
 
 <br>
 
-<mat-expansion-panel>
+<mat-expansion-panel *ngIf="showCompletedList">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Completed Tasks

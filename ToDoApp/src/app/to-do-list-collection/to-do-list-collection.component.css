@@ -67,6 +67,75 @@
   background: rgba(0, 0, 0, .2);
 }
 
+/* Desktops and laptops ----------- */
+@media only screen  and (min-width : 1024px) {
+  .card-container{
+    display: flex;
+    flex-direction: row;
+  
+}
+
+.openCard{
+  display: flex;
+  flex-direction: row;
+  flex-basis: 97%;
+}
+
+.listText{
+  margin-left: 3%;
+  
+}
+
+.listIcons{
+  padding-top: 0.3%;
+}
+  }
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+ 
+  .addNewList{
+    padding-top: 3%;
+    margin-left: 2%;
+    margin-right: 5%;
+  }
+
+  .card-container{
+    display: flex;
+}
+
+.listText{
+  margin-left: 5%;
+  margin-top: 2%;
+  flex-basis: 80%;
+}
+
+.listIcons{
+  padding-top: 2%;
+}
+
+.newMore{
+  padding-right: 0%;
+  padding-left: 50%;
+  margin-left: 20%;
+  padding-top: 3%;
+}
+
+.openCard{
+  display: flex;
+  flex-basis: 97%;
+}
+
+
+
+  }
+
+
+
+
+
+
 
 
 .solidred {border-style: solid; color: red;}
