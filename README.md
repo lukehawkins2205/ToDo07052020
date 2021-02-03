@@ -11,6 +11,7 @@ Hi! This is an angular project that I developed to showcase my skillset. This wa
 # Libraries
 
  - Angular Material
+ - RXJS
  - Bootstrap
 
 # Features
