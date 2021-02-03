@@ -50,10 +50,8 @@ Hi! This is an angular project that I developed to showcase my skillset.
     }
 
 
- - 
-
 ## Authentication
 Fire auth is utilized so that user credentials can be sent to firestore DB for validation. Depending on what option the user chooses, they can either sign up or login to view existing Todos. 
 
 ## Date fields and overdue flag
-When a user created a Todo item, they must select a date via the datepicker component. When a Todo is retrieved, its checked against the date to see weather its overdue and sets a flag appropriately. 
+When a user creates a Todo item, they must select a date via the datepicker component. When a Todo is retrieved, its checked against the date to see weather its overdue and sets a flag appropriately. 
